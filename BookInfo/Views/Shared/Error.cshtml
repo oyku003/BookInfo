@@ -1,0 +1,58 @@
+﻿@using BookInfo.ViewModels
+@using  BookInfo.Entities.Messages
+@model  ErrorViewModel
+
+
+@{
+    ViewBag.Title = Model.Title;
+}
+
+
+<link href="~/Content/login-register.css" rel="stylesheet" />
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+@using (Html.BeginForm())
+{
+    <section class="login-info">
+        <div class="container">
+            <div class="row main">
+                <div class="form-header">
+                    <h1 class="text-center ">@Model.Header </h1>
+                </div>
+                <div class="main-danger">
+                    <div class="text-success">
+                        <h2> <span class="glyphicon glyphicon-remove-circle"></span>@Model.Title</h2>
+                        <hr />
+                    </div>
+                    <p class="text-justify">
+                        @foreach (ErrorMessageObj msg in Model.Items)
+                        {
+                            @msg.Message <br />
+                        }
+                    </p>
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+}
+@{
+    string js = string.Empty;
+    if (Model.IsRedirecting)
+    {
+        js = " setTimeout(function () {window.location = ' " + Model.RedirectingUrl + "';}, " + Model.RedirectingTimeout + ");";
+    }
+}
+
+
+<script>
+    $(function () {
+
+       @Html.Raw(js);
+    });
+</script>
+
+

@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{30DACB7C-2343-4A56-B671-4A179BC4184C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BookInfo.BusinessLayer</RootNamespace>
+    <AssemblyName>BookInfo.BusinessLayer</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Abstract\ManagerBase.cs" />
+    <Compile Include="AuthorManager.cs" />
+    <Compile Include="BookManager.cs" />
+    <Compile Include="CategoryManager.cs" />
+    <Compile Include="CommentManager.cs" />
+    <Compile Include="LikedManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PublisherManager.cs" />
+    <Compile Include="Result\BusinessLayerResult.cs" />
+    <Compile Include="Test.cs" />
+    <Compile Include="UserManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BookInfo.Common\BookInfo.Common.csproj">
+      <Project>{25d5d871-f424-4d66-aa86-eaf0f900bb17}</Project>
+      <Name>BookInfo.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BookInfo.Core\BookInfo.Core.csproj">
+      <Project>{78948707-967c-4162-9a96-9c3817b5c739}</Project>
+      <Name>BookInfo.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BookInfo.DataAccessLayer\BookInfo.DataAccessLayer.csproj">
+      <Project>{debe5ab1-1db3-4be0-802b-cf2551a4def3}</Project>
+      <Name>BookInfo.DataAccessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BookInfo.Entities\BookInfo.Entities.csproj">
+      <Project>{7af626d9-064f-415f-99d6-c280d992cd62}</Project>
+      <Name>BookInfo.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

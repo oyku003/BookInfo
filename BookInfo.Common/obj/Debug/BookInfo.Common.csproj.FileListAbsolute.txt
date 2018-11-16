@@ -1,0 +1,16 @@
+C:\Users\YAĞIZ\source\repos\BookInfo\BookInfo.Common\bin\Debug\BookInfo.Common.dll
+C:\Users\YAĞIZ\source\repos\BookInfo\BookInfo.Common\bin\Debug\BookInfo.Common.pdb
+C:\Users\YAĞIZ\source\repos\BookInfo\BookInfo.Common\obj\Debug\BookInfo.Common.csproj.CoreCompileInputs.cache
+C:\Users\YAĞIZ\source\repos\BookInfo\BookInfo.Common\obj\Debug\BookInfo.Common.dll
+C:\Users\YAĞIZ\source\repos\BookInfo\BookInfo.Common\obj\Debug\BookInfo.Common.pdb
+E:\BookInfo\BookInfo\BookInfo.Common\obj\Debug\BookInfo.Common.csprojResolveAssemblyReference.cache
+E:\BookInfo\BookInfo\BookInfo.Common\obj\Debug\BookInfo.Common.dll
+E:\BookInfo\BookInfo\BookInfo.Common\obj\Debug\BookInfo.Common.pdb
+E:\BookInfo\BookInfo\BookInfo.Common\bin\Debug\BookInfo.Common.dll
+E:\BookInfo\BookInfo\BookInfo.Common\bin\Debug\BookInfo.Common.pdb
+C:\Users\YAĞIZ\Desktop\BookInfo\BookInfo.Common\bin\Debug\BookInfo.Common.dll
+C:\Users\YAĞIZ\Desktop\BookInfo\BookInfo.Common\bin\Debug\BookInfo.Common.pdb
+C:\Users\YAĞIZ\Desktop\BookInfo\BookInfo.Common\obj\Debug\BookInfo.Common.csprojAssemblyReference.cache
+C:\Users\YAĞIZ\Desktop\BookInfo\BookInfo.Common\obj\Debug\BookInfo.Common.csproj.CoreCompileInputs.cache
+C:\Users\YAĞIZ\Desktop\BookInfo\BookInfo.Common\obj\Debug\BookInfo.Common.dll
+C:\Users\YAĞIZ\Desktop\BookInfo\BookInfo.Common\obj\Debug\BookInfo.Common.pdb
