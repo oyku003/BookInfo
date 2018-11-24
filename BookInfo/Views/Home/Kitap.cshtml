@@ -14,7 +14,12 @@
     <div class="row">
         <div class="col-md-10">
             <div class="col-md-5"><h1>@Model.Name</h1></div>
-            <div class="col-md-5"><h1>Puan</h1></div>
+            <p>
+                <button class="btn btn-default btn-sm" data-liked="false" data-note-id="@Model.Id">
+                    <span id="rateYo"></span><span class="like-count">@Model.LikeCount</span>
+                </button>
+            </p>
+            @*<div class="col-md-5"><div id="rateYo"></div></div>*@
         </div>
     </div>
 </div>
@@ -38,22 +43,39 @@
         </p>
     </div>
     <div class="col-md-10">
-        <h1 style="text-align:center">Yorumlar</h1><br />
-        @foreach (Comment item in Model.Comments)
-        {
-            <div style=" border-radius: 25px;border: 2px solid #808080;padding: 20px;width:100%;height:150px; ">
-                <div class="col-md-8">
-                    @item.Owner.Username <br />
-                    @item.Text
+        <button class="btn btn-success btn-lg" style=" display: flex; justify-content: center;" data-toggle="modal" data-target="#modal_comment" data-note-id="@Model.Id">
+            <span class="glyphicon glyphicon-comment">Yorumlar</span>
+        </button>
+        @*<h1 style="text-align:center">Yorumlar</h1><br />
+            @foreach (Comment item in Model.Comments)
+            {
+                <div style=" border-radius: 25px;border: 2px solid #808080;padding: 20px;width:100%;height:150px; ">
+                    <div class="col-md-8">
+                        @item.Owner.Username <br />
+                        @item.Text
+                    </div>
+                    <div class="col-md-2 pull-right">
+                        @item.CreatedOn.ToShortDateString()
+                    </div>
                 </div>
-                <div class="col-md-2 pull-right">
-                    @item.CreatedOn.ToShortDateString()
-                </div>
-            </div>
-        }
+            }*@
 
     </div>
 
 </div>
 
+@Bootstrap.ModalPopup(id: "modal_comment", title: "Yorumlar")
+<script src="~/Scripts/comment.js"></script>
+<script src="~/Scripts/like.js"></script>
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/jquery.rateyo.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#rateYo").rateYo({
+            rating: 3.6//TODO: GetLike metodu ile kitabın puanını buraya bas
+        });
+
+    });
+</script>
 

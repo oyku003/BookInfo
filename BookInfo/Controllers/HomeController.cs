@@ -1,6 +1,8 @@
 ﻿using System;
+using PagedList;
 using System.Web;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 using BookInfo.Models;
 using BookInfo.Entities;
@@ -11,7 +13,6 @@ using System.Collections.Generic;
 using BookInfo.Entities.EntityModel;
 using BookInfo.BusinessLayer.Result;
 using static BookInfo.Entities.Messages.ErrorMessageCode;
-using PagedList;
 using static BookInfo.Entities.EntityModel.SearchViewModel;
 
 namespace BookInfo.Controllers
@@ -29,100 +30,156 @@ namespace BookInfo.Controllers
         {
             return View(bookManager.ListQueryable().Where(x => x.Id.ToString() != null).OrderByDescending(x => x.ModifiedOn).ToList());
         }
-        //public ActionResult Kitap(int Id)
-        //{
-        //BookViewModel model;
-        //try
-        //{
-        //    Book book = bookManager.ListQueryable().Include("Comments").Where(x => x.Id == Id).FirstOrDefault();
-
-        //    if (book != null)
-        //    {
-        //         model = new BookViewModel()
-        //        {
-        //            Name = book.Name,
-        //            Author = book.Author.Name,
-        //            Description = book.Description,
-        //            Page = book.Page,
-        //            Publisher = book.Publisher.Name,
-        //            Year = book.Year,
-        //            Comments = book.Comments
-        //        };
-        //        return View(model);
-        //    }
-        //}
-        //catch (Exception ex)
-        //{
-
-        //    throw;
-        //}
-        //return View(model);
-        //}
-        public ActionResult Search(int page = 1, string search = "")
+        public ActionResult Kitap(int Id)
         {
+            if (Id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            BookViewModel model = null;
             try
             {
-                IPagedList<SearchViewModel> lst = null;
-                List<SearchViewModel> lstSearching = new List<SearchViewModel>();
+                Book book = bookManager.ListQueryable().Include("Comments").Where(x => x.Id == Id).FirstOrDefault();
 
-                if (search != "")
+                if (book != null)
                 {
-                    var books = bookManager.List().Where(x => x.Name.Contains(search)).ToList();
-                    var authors = authorManager.List().Where(x => x.Name.Contains(search)).ToList();
-                    var publishers = publisherManager.List().Where(x => x.Name.Contains(search)).ToList();
-
-                    if (books.Any())
+                    model = new BookViewModel()
                     {
-                        foreach (var book in books)
-                        {
-                            SearchViewModel subSearchViewModel = new SearchViewModel()
-                            {
-                                Description = book.Description,
-                                Id = book.Id,
-                                Title = book.Name,
-                                Type = SearchType.Book
-                            };
-
-                            lstSearching.Add(subSearchViewModel);
-                        }
-                    }
-                    if (authors.Any())
-                    {
-                        foreach (var author in authors)
-                        {
-                            var subSearchViewModel = new SearchViewModel
-                            {
-                                Id = author.Id,
-                                Title = author.Name,
-                                Type = SearchType.Author
-                            };
-
-                            lstSearching.Add(subSearchViewModel);
-                        }
-                    }
-                    if (publishers.Any())
-                    {
-                        foreach (var publisher in publishers)
-                        {
-                            var subSearchViewModel = new SearchViewModel
-                            {
-                                Id = publisher.Id,
-                                Title = publisher.Name,
-                                Type = SearchType.Publisher
-                            };
-
-                            lstSearching.Add(subSearchViewModel);
-                        }
-                    }
+                        Id = book.Id,
+                        Name = book.Name,
+                        Author = book.Author.Name,
+                        Description = book.Description,
+                        Page = book.Page,
+                        Publisher = book.Publisher.Name,
+                        Year = book.Year,
+                        Comments = book.Comments
+                    };
+                    return View(model);
                 }
-                lst = lstSearching.ToPagedList(page, 1);
-                return View(lst);
             }
             catch (Exception ex)
             {
+                ErrorViewModel errorNotifyObj = new ErrorViewModel()
+                {
+                    Title = "Aradığınız kitap bilgisine ulaşılırken bir hata oluştu.Anasayfaya yönlendiriliyorsunuz...",
+                    RedirectingUrl = "/Home/Index"
+                };
+                return View("Error", errorNotifyObj);
+            }
+            return View(model);
+        }
+        //public ActionResult Search(int page = 1, string search = "")
+        //{
+        //    if (string.IsNullOrWhiteSpace(search))
+        //    {            
+        //    try
+        //    {
+        //        IPagedList<SearchViewModel> lst = null;
+        //        List<SearchViewModel> lstSearching = new List<SearchViewModel>();
 
+        //        if (search != "")
+        //        {
+        //            var books = bookManager.List().Where(x => x.Name.StartsWith(search)).ToList();
+        //            var authors = authorManager.List().Where(x => x.Name.StartsWith(search)).ToList();
+        //            var publishers = publisherManager.List().Where(x => x.Name.StartsWith(search)).ToList();
+
+        //            if (books.Any())
+        //            {
+        //                foreach (var book in books)
+        //                {
+        //                    SearchViewModel subSearchViewModel = new SearchViewModel()
+        //                    {
+        //                        Description = book.Description,
+        //                        Id = book.Id,
+        //                        Title = book.Name,
+        //                        Type = SearchType.Book
+        //                    };
+
+        //                    lstSearching.Add(subSearchViewModel);
+        //                }
+        //            }
+        //            if (authors.Any())
+        //            {
+        //                foreach (var author in authors)
+        //                {
+        //                    var subSearchViewModel = new SearchViewModel
+        //                    {
+        //                        Id = author.Id,
+        //                        Title = author.Name,
+        //                        Type = SearchType.Author
+        //                    };
+
+        //                    lstSearching.Add(subSearchViewModel);
+        //                }
+        //            }
+        //            if (publishers.Any())
+        //            {
+        //                foreach (var publisher in publishers)
+        //                {
+        //                    var subSearchViewModel = new SearchViewModel
+        //                    {
+        //                        Id = publisher.Id,
+        //                        Title = publisher.Name,
+        //                        Type = SearchType.Publisher
+        //                    };
+
+        //                    lstSearching.Add(subSearchViewModel);
+        //                }
+        //            }
+        //        }
+        //        lst = lstSearching.ToPagedList(page, 1);
+        //        return View(lst);
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        throw;
+        //    }
+        //    }
+        //    return null;
+        //}
+        public ActionResult Search(int page = 1, string search = "")
+        {          
+            try
+            {   
+                if (!string.IsNullOrWhiteSpace(search))
+                {
+                    IPagedList<Book> lst = null;
+                    List<Book> lstSearching = new List<Book>();
+
+                    var books = bookManager.List().Where(x => x.Name.ToLower().Contains(search.ToLower())).ToList();
+                    var authorsBook = bookManager.List().Where(x => x.Author.Name.ToLower().Contains(search));
+                    var publishersBook = bookManager.List().Where(x => x.Publisher.Name.ToLower().Contains(search));
+
+                    //TODO:Foreach yapısını linq'ya çek
+                    foreach (var item in books)
+                    {
+                        lstSearching.Add(item);
+                    }
+                    foreach (var item in authorsBook)
+                    {
+                        lstSearching.Add(item);
+                    }
+                    foreach (var item in publishersBook)
+                    {
+                        lstSearching.Add(item);
+                    }
+
+                    ViewBag.ToplamKayitSayisi = lstSearching.Count;
+
+                    return View(lstSearching.ToPagedList(page, 1));
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                //TODO:loglama yap
                 throw;
             }
+
+            // return View(lstSearching.ToPagedList(page, 1));
+
             return null;
         }
         public ActionResult MostLiked()

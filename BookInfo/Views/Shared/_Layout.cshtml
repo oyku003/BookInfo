@@ -15,6 +15,7 @@
 
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
     <!-- Custom CSS -->
+    <link href="~/Content/jquery.rateyo.css" rel="stylesheet" />
 
     <link href="~/Content/shop-homepage.css" rel="stylesheet" />
     <script src="~/Scripts/jquery-3.3.1.js"></script>
@@ -99,7 +100,7 @@
                 {
                     <div class="col-lg-6" style="padding-top:8px;padding-bottom:8px">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Kitap,Yazar ya da Yayınevi aratın..." value="@(Request.QueryString["search"])" name="search" required autocomplete="off">
+                            <input type="text" class="form-control" placeholder="Hangi Ürünü arıyorsunuz?..." value="@(Request.QueryString["search"])" name="search" required autocomplete="off">
                             <span class="input-group-btn">
                                 <a href="@Url.Action("Search","Home",null)" role="button" class="btn btn-default">Ara</a>
                             </span>

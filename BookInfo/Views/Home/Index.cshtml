@@ -46,10 +46,10 @@
 
             @foreach (Book book in Model)
             {
-                <div class="col-sm-3 col-lg-4 col-md-3" data-note-id="@book.Id">
-                    <div class="thumbnail">
-                        <img src="http://placehold.it/320x150" alt="@book.Name">
-                        <div class="caption">
+                <div class="col-sm-4 col-lg-4 col-md-3" data-note-id="@book.Id">
+                    <div class="thumbnail" style="height:250px">
+                        <img src="~/Images/Mustafa_Kemal.jpg" style="height:150px;width:100px" alt="@book.Name">
+                        <div class="caption" style="height:105px">
                             <h4 style="text-align:center">
                                 <a href="/Home/Kitap/@book.Id">
                                     @book.Name
@@ -57,7 +57,7 @@
                             </h4>
                             <h6 style="text-align:center">
                                 @book.Author.Name<br />
-                                @book.Year
+                                @book.Year<br />
                                 @book.Publisher.Name
                             </h6>
                         </div>
