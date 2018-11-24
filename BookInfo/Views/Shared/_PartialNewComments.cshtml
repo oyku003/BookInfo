@@ -6,9 +6,8 @@
 }
 <p class="lead">En Son Yorumlananlar</p>
 <div class="list-group">
-    <a href="/Home/Index" class="list-group-item"><span class="glyphicon glyphicon-arrow-right"></span>Tümü</a>
     @foreach (Comment item in list)
     {
-        <a href="/Home/ByCategory/@item.Book.Id" title="@item.Book.Name" class="list-group-item"><span class="glyphicon glyphicon-arrow-right"></span>@item.Book.Name</a>
+        <a href="/Home/Kitap/@item.Book.Id" title="@item.Book.Name" class="list-group-item"><span class="glyphicon glyphicon-arrow-right"></span>@item.Book.Name</a>
     }
 </div>

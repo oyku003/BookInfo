@@ -32,3 +32,5 @@ C:\Users\YAĞIZ\Desktop\BookInfo\BookInfo.Entities\obj\Debug\BookInfo.Entities.c
 C:\Users\YAĞIZ\Desktop\BookInfo\BookInfo.Entities\obj\Debug\BookInfo.Entities.csproj.CopyComplete
 C:\Users\YAĞIZ\Desktop\BookInfo\BookInfo.Entities\obj\Debug\BookInfo.Entities.dll
 C:\Users\YAĞIZ\Desktop\BookInfo\BookInfo.Entities\obj\Debug\BookInfo.Entities.pdb
+C:\Users\YAĞIZ\Desktop\BookInfo\BookInfo.Entities\bin\Debug\PagedList.dll
+C:\Users\YAĞIZ\Desktop\BookInfo\BookInfo.Entities\bin\Debug\PagedList.xml

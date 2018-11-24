@@ -40,7 +40,7 @@ namespace BookInfo.DataAccessLayer.EntityFramework
                 DateTime now = DateTime.Now;
                 o.CreatedOn = now;
                 o.ModifiedOn = now;
-                o.ModifiedUsername = App.Common.GetCurrentUsername(); ;//TODO: İşlem yapan kullanıcı adı yazılmalı
+                o.ModifiedUsername = App.Common.GetCurrentUsername(); //TODO: İşlem yapan kullanıcı adı yazılmalı
             }
             return Save();
         }

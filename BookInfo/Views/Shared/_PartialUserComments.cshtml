@@ -1,0 +1,76 @@
+﻿@using BookInfo.Entities
+@using BookInfo.Models
+@using PagedList
+@using PagedList.Mvc
+@using BookInfo.Entities.EntityModel
+@model  List<Comment>
+
+@{
+    BookUser user = CurrentSession.User;
+}
+
+@if (user != null)
+{
+    <form action="@Url.Action("Create", "Comment")" method="get">
+        @Html.Hidden("id", Request.QueryString["id"])
+        <div class="row">
+            <div class="col-md-8">
+                <div class="form-group">
+                    <textarea class="form-control" rows="5" id="commentText" name="commentText" placeholder="Yorumunuz..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-info btn-sm">Yorum yap</button>
+            </div>
+        </div>
+    </form>
+}
+
+else
+{
+    <div class="row">
+        <div class="col-md-8">
+            <div class="alert alert-info">
+                Yorum yapmak için giriş yapmalısınız.
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model != null && Model.Count > 0)
+{
+    <div class="row">
+        <div class="col-md-8">
+            <h3 style="text-align:center">Yorumlar</h3>
+            <span><b>Yorum Sayısı : @Model.Count </b></span>
+
+            @foreach (var item in Model)
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">@item.Owner.Username <p style="float:right">@item.CreatedOn.ToShortDateString()</p></h3>
+                        @*<h3 class="panel-title" style="text-align:right">@item.CreatedOn.ToShortDateString()</h3>*@
+                    </div>
+                    <div class="panel-body">
+                        @item.Text
+                    </div>
+                </div>
+            }
+
+        </div>
+        @*<div id="myPager" style="text-align:center">
+                @Html.PagedListPager(Model, page => Url.Action("ShowBookComments", "Comment", new { page = page, search = Request.QueryString["id"] }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+
+            </div>*@
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-8">
+            <div class="alert alert-danger">
+                Henüz yorum yok.
+            </div>
+        </div>
+    </div>
+}
+
+

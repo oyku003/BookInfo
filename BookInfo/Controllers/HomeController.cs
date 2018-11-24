@@ -55,6 +55,7 @@ namespace BookInfo.Controllers
                         Year = book.Year,
                         Comments = book.Comments
                     };
+
                     return View(model);
                 }
             }
@@ -72,70 +73,70 @@ namespace BookInfo.Controllers
         //public ActionResult Search(int page = 1, string search = "")
         //{
         //    if (string.IsNullOrWhiteSpace(search))
-        //    {            
-        //    try
         //    {
-        //        IPagedList<SearchViewModel> lst = null;
-        //        List<SearchViewModel> lstSearching = new List<SearchViewModel>();
-
-        //        if (search != "")
+        //        try
         //        {
-        //            var books = bookManager.List().Where(x => x.Name.StartsWith(search)).ToList();
-        //            var authors = authorManager.List().Where(x => x.Name.StartsWith(search)).ToList();
-        //            var publishers = publisherManager.List().Where(x => x.Name.StartsWith(search)).ToList();
+        //            IPagedList<SearchViewModel> lst = null;
+        //            List<SearchViewModel> lstSearching = new List<SearchViewModel>();
 
-        //            if (books.Any())
+        //            if (search != "")
         //            {
-        //                foreach (var book in books)
-        //                {
-        //                    SearchViewModel subSearchViewModel = new SearchViewModel()
-        //                    {
-        //                        Description = book.Description,
-        //                        Id = book.Id,
-        //                        Title = book.Name,
-        //                        Type = SearchType.Book
-        //                    };
+        //                var books = bookManager.List().Where(x => x.Name.StartsWith(search)).ToList();
+        //                var authors = authorManager.List().Where(x => x.Name.StartsWith(search)).ToList();
+        //                var publishers = publisherManager.List().Where(x => x.Name.StartsWith(search)).ToList();
 
-        //                    lstSearching.Add(subSearchViewModel);
+        //                if (books.Any())
+        //                {
+        //                    foreach (var book in books)
+        //                    {
+        //                        SearchViewModel subSearchViewModel = new SearchViewModel()
+        //                        {
+        //                            Description = book.Description,
+        //                            Id = book.Id,
+        //                            Title = book.Name,
+        //                            Type = SearchType.Book
+        //                        };
+
+        //                        lstSearching.Add(subSearchViewModel);
+        //                    }
+        //                }
+        //                if (authors.Any())
+        //                {
+        //                    foreach (var author in authors)
+        //                    {
+        //                        var subSearchViewModel = new SearchViewModel
+        //                        {
+        //                            Id = author.Id,
+        //                            Title = author.Name,
+        //                            Type = SearchType.Author
+        //                        };
+
+        //                        lstSearching.Add(subSearchViewModel);
+        //                    }
+        //                }
+        //                if (publishers.Any())
+        //                {
+        //                    foreach (var publisher in publishers)
+        //                    {
+        //                        var subSearchViewModel = new SearchViewModel
+        //                        {
+        //                            Id = publisher.Id,
+        //                            Title = publisher.Name,
+        //                            Type = SearchType.Publisher
+        //                        };
+
+        //                        lstSearching.Add(subSearchViewModel);
+        //                    }
         //                }
         //            }
-        //            if (authors.Any())
-        //            {
-        //                foreach (var author in authors)
-        //                {
-        //                    var subSearchViewModel = new SearchViewModel
-        //                    {
-        //                        Id = author.Id,
-        //                        Title = author.Name,
-        //                        Type = SearchType.Author
-        //                    };
-
-        //                    lstSearching.Add(subSearchViewModel);
-        //                }
-        //            }
-        //            if (publishers.Any())
-        //            {
-        //                foreach (var publisher in publishers)
-        //                {
-        //                    var subSearchViewModel = new SearchViewModel
-        //                    {
-        //                        Id = publisher.Id,
-        //                        Title = publisher.Name,
-        //                        Type = SearchType.Publisher
-        //                    };
-
-        //                    lstSearching.Add(subSearchViewModel);
-        //                }
-        //            }
+        //            lst = lstSearching.ToPagedList(page, 1);
+        //            return View(lst);
         //        }
-        //        lst = lstSearching.ToPagedList(page, 1);
-        //        return View(lst);
-        //    }
-        //    catch (Exception ex)
-        //    {
+        //        catch (Exception ex)
+        //        {
 
-        //        throw;
-        //    }
+        //            throw;
+        //        }
         //    }
         //    return null;
         //}
@@ -168,7 +169,7 @@ namespace BookInfo.Controllers
 
                     ViewBag.ToplamKayitSayisi = lstSearching.Count;
 
-                    return View(lstSearching.ToPagedList(page, 1));
+                    return View(lstSearching.ToPagedList(page, 2));
                 }
                 
             }

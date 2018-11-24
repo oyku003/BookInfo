@@ -131,10 +131,16 @@ namespace BookInfo.Controllers
 
         [HttpPost]
         public ActionResult GetLiked(int[] ids)
-        {//contains = sql'deki in.   
-            List<int> likedNoteIds = likedManager.List(x => x.LikedUser.Id == CurrentSession.User.Id && ids.Contains(x.Book.Id)).Select(
+        {
+            if (ids != null)
+            {
+                 List<int> likedNoteIds = likedManager.List(x => x.LikedUser.Id == CurrentSession.User.Id && ids.Contains(x.Book.Id)).Select(
                 x => x.Book.Id).ToList();
-            return Json(new { result = likedNoteIds });
+
+                return Json(new { result = likedNoteIds });
+            }
+            return null;
+            
         }
 
         [HttpPost]

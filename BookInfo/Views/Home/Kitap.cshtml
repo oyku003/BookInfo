@@ -1,5 +1,7 @@
 ﻿@using BookInfo.Entities.EntityModel
 @using BookInfo.Entities
+@using PagedList
+@using PagedList.Mvc
 @model BookViewModel
 
 @{
@@ -42,27 +44,29 @@
             @Model.Description
         </p>
     </div>
-    <div class="col-md-10">
-        <button class="btn btn-success btn-lg" style=" display: flex; justify-content: center;" data-toggle="modal" data-target="#modal_comment" data-note-id="@Model.Id">
-            <span class="glyphicon glyphicon-comment">Yorumlar</span>
-        </button>
-        @*<h1 style="text-align:center">Yorumlar</h1><br />
-            @foreach (Comment item in Model.Comments)
-            {
-                <div style=" border-radius: 25px;border: 2px solid #808080;padding: 20px;width:100%;height:150px; ">
-                    <div class="col-md-8">
-                        @item.Owner.Username <br />
-                        @item.Text
+    @*<div class="col-md-10">
+            <button class="btn btn-success btn-lg" style=" display: flex; justify-content: center;" data-toggle="modal" data-target="#modal_comment" data-note-id="@Model.Id">
+                <span class="glyphicon glyphicon-comment">Yorumlar</span>
+            </button>
+            <h1 style="text-align:center">Yorumlar</h1><br />
+                @foreach (Comment item in Model.Comments)
+                {
+                    <div style=" border-radius: 25px;border: 2px solid #808080;padding: 20px;width:100%;height:150px; ">
+                        <div class="col-md-8">
+                            @item.Owner.Username <br />
+                            @item.Text
+                        </div>
+                        <div class="col-md-2 pull-right">
+                            @item.CreatedOn.ToShortDateString()
+                        </div>
                     </div>
-                    <div class="col-md-2 pull-right">
-                        @item.CreatedOn.ToShortDateString()
-                    </div>
-                </div>
-            }*@
+                }
 
-    </div>
+        </div>*@
 
+        @Html.Partial("_PartialUserComments", Model.Comments)
 </div>
+
 
 @Bootstrap.ModalPopup(id: "modal_comment", title: "Yorumlar")
 <script src="~/Scripts/comment.js"></script>

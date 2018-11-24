@@ -2,6 +2,8 @@
 using BookInfo.Entities;
 //using MyEverNoteMvc.Filters;
 using BookInfo.Models;
+using PagedList;
+using System.Collections.Generic;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
@@ -27,10 +29,20 @@ namespace MyEverNoteMvc.Controllers
             }
             return PartialView("_PartialComments", book.Comments);
         }
+        public ActionResult ShowBookComments(int id)
+        {
+            List<Comment> commentList = new List<Comment>();
+            commentList = commentManager.List(x => x.Book.Id == id);
+            ViewBag.ToplamYorumSayısı = commentList.Count;
+
+            //return PartialView("_PartialUserComments", commentList.ToPagedList(page, 1));
+            return PartialView(commentList);
+        }
 
         [HttpPost]
         public ActionResult Edit(int? id, string text)
         {
+            
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -72,33 +84,58 @@ namespace MyEverNoteMvc.Controllers
             return Json(new { result = false }, JsonRequestBehavior.AllowGet);
         }
        
-        [HttpPost]
-        public ActionResult Create(Comment comment, int bookid)
+        //[HttpPost]
+        //public ActionResult Create(string commentText, int bookid)
+        //{
+        //    ModelState.Remove("ModifiedUsername");
+        //    ModelState.Remove("ModifiedOn");
+        //    ModelState.Remove("CreatedOn");
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (bookid == null)
+        //        {
+        //            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //        }
+        //        Book book = bookManager.Find(x => x.Id == bookid);
+
+        //        if (book == null)
+        //        {
+        //            return new HttpNotFoundResult();
+        //        }
+        //        Comment comment = new Comment();
+        //        comment.Book = book;
+        //        comment.Owner = CurrentSession.User;
+
+        //        //    if (commentManager.Insert(comment) > 0)
+        //        //    {
+        //        //        return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+        //        //    }
+        //        //}
+        //        //return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+
+        //        return null;
+        //}
+
+        public ActionResult Create(string commentText, int id)
         {
-            ModelState.Remove("ModifiedUsername");
-            ModelState.Remove("ModifiedOn");
-            ModelState.Remove("CreatedOn");
-            if (ModelState.IsValid)
+            
+            if (id == null)
             {
-                if (bookid == null)
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                }
-                Book book = bookManager.Find(x => x.Id == bookid);
-
-                if (book == null)
-                {
-                    return new HttpNotFoundResult();
-                }
-                comment.Book = book;
-                comment.Owner = CurrentSession.User;
-
-                if (commentManager.Insert(comment) > 0)
-                {
-                    return Json(new { result = true }, JsonRequestBehavior.AllowGet);
-                }
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+            Comment comment = new Comment();
+
+            Book book = bookManager.Find(x => x.Id == id);
+            comment.Book = book;
+            comment.Owner = CurrentSession.User;
+            comment.Text = commentText;
+
+            if (commentManager.Insert(comment) > 0)
+            {
+                return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+            }
+
+            return null;
         }
     }
 }
