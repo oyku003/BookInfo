@@ -143,47 +143,6 @@ namespace BookInfo.Controllers
             
         }
 
-        [HttpPost]
-        public ActionResult SetLikeState(int noteid, bool liked)
-        {
-            int res = 0;
-            Liked like = likedManager.Find(x => x.Book.Id == noteid && x.LikedUser.Id == CurrentSession.User.Id);//like'lanmış mı diye kontrol edeceğiz
-
-            Book book = bookManager.Find(x => x.Id == noteid);//notu bulduk
-            if (like != null && liked == false)//db'den like'lanmış olarak kayıt dönmeli ve önyüzden liked nesnesi false yani like'lanmamış olarak dönmeli yani false
-            {
-                res = likedManager.Delete(like);
-            }
-            else if (like == null && liked == true)
-            {
-                res = likedManager.Insert(new Liked()
-                {
-                    LikedUser = CurrentSession.User,
-                    Book = book
-                });
-            }
-            if (res > 0)//bir işlem yaptıysam
-            {
-                if (liked)
-                {
-                    book.LikeCount++;
-                }
-                else
-                {
-                    book.LikeCount--;
-                }
-                res = bookManager.Update(book);
-                return Json(new { hasError = false, errorMessage = string.Empty, result = book.LikeCount });
-            }
-            return Json(new
-            {
-                hasError = true,
-                errorMessage = "Beğenme işlemi gerçekleştirilemedi.",
-                result = book.LikeCount
-            });
-
-        }
-
         public ActionResult GetNoteText(int? id)
         {
             if (id == null)
@@ -197,6 +156,70 @@ namespace BookInfo.Controllers
             }
 
             return PartialView("_PartialNoteText", book);
+        }
+       
+        [HttpPost]
+        public JsonResult SetLikeState(int id, int liked)
+        {
+            int res = 0;
+            Liked like = likedManager.Find(x => x.Book.Id == id && x.LikedUser.Id == CurrentSession.User.Id);//like'lanmış mı diye kontrol edeceğiz
+
+            Book book = bookManager.Find(x => x.Id == id);
+            if (like != null && liked <= 0)//db'den like'lanmış olarak kayıt dönmeli ve önyüzden liked nesnesi false yani like'lanmamış olarak dönmeli yani false
+            {
+                res = likedManager.Delete(like);
+            }
+            else if (like == null && liked > 0)
+            {
+                res = likedManager.Insert(new Liked()
+                {
+                    LikedUser = CurrentSession.User,
+                    Book = book,
+                    Point = liked
+                });
+            }
+            else if (like != null && liked > 0)
+            {
+                like.Book = book;
+                like.LikedUser = CurrentSession.User;
+                like.Point = liked;
+                res = likedManager.Update(like);
+            }
+            if (res > 0)//bir işlem yaptıysam
+            {
+                if (liked > 0)
+                {
+                    if (like!= null && like.LikedUser.Id != CurrentSession.User.Id)
+                    {
+                        book.LikeCount++;
+                    }
+                    else if (like == null)
+                    {
+                        book.LikeCount++;
+                    }
+                }
+                else
+                {
+                    book.LikeCount--;
+                }
+                res = bookManager.Update(book);
+
+                var bookSumPoint = likedManager.List().Where(x => x.Book.Id == id).Sum(x=>x.Point);
+
+                var bookLikeCount = bookManager.List().Where(x => x.Id == id).Select(x => x.LikeCount).First();
+
+                var avgPoint = bookSumPoint / bookLikeCount;
+
+                return Json(new { hasError = false, errorMessage = string.Empty, result = avgPoint });
+            }
+
+            return Json(new
+            {
+                hasError = true,
+                errorMessage = "Beğenme işlemi gerçekleştirilemedi.",
+                result = book.LikeCount
+            });
+
         }
     }
 }

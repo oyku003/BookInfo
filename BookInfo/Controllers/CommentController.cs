@@ -118,7 +118,6 @@ namespace MyEverNoteMvc.Controllers
 
         public ActionResult Create(string commentText, int id)
         {
-            
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -137,5 +136,6 @@ namespace MyEverNoteMvc.Controllers
 
             return null;
         }
+
     }
 }

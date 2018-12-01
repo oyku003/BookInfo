@@ -25,10 +25,25 @@ namespace BookInfo.Controllers
         private CommentManager commentManager = new CommentManager();
         private AuthorManager authorManager = new AuthorManager();
         private PublisherManager publisherManager = new PublisherManager();
+        private LikedManager likedManager = new LikedManager();
 
         public ActionResult Index()
         {
-            return View(bookManager.ListQueryable().Where(x => x.Id.ToString() != null).OrderByDescending(x => x.ModifiedOn).ToList());
+            ViewBag.KitapSayısı = bookManager.ListQueryable().Where(x => x.Id.ToString() != null).OrderByDescending(x => x.ModifiedOn).ToList().Count();
+
+            return View();
+        }
+        public PartialViewResult GetBook(int? page)
+        {
+            var pageIndex = page ?? 1;
+
+            var bookList = bookManager.ListQueryable().Where(x => x.Id.ToString() != null).OrderByDescending(x => x.ModifiedOn).ToList();
+
+            ViewBag.KitapSayısı = bookList.Count();
+
+            var model = bookList.Skip(3 * pageIndex - 3).Take(3).ToList();
+
+            return PartialView("_IndexBook", model);
         }
         public ActionResult Kitap(int Id)
         {
@@ -55,6 +70,14 @@ namespace BookInfo.Controllers
                         Year = book.Year,
                         Comments = book.Comments
                     };
+
+                    ViewBag.PageCount = commentManager.List().Where(x => x.Book.Id == Id).Count();
+
+                    var bookSumPoint = likedManager.List().Where(x => x.Book.Id == Id).Sum(x => x.Point);
+
+                    var bookLikeCount = bookManager.List().Where(x => x.Id == Id).Select(x => x.LikeCount).First();
+
+                    model.Point = bookSumPoint / bookLikeCount;
 
                     return View(model);
                 }
@@ -141,9 +164,9 @@ namespace BookInfo.Controllers
         //    return null;
         //}
         public ActionResult Search(int page = 1, string search = "")
-        {          
+        {
             try
-            {   
+            {
                 if (!string.IsNullOrWhiteSpace(search))
                 {
                     IPagedList<Book> lst = null;
@@ -158,20 +181,24 @@ namespace BookInfo.Controllers
                     {
                         lstSearching.Add(item);
                     }
+
                     foreach (var item in authorsBook)
                     {
                         lstSearching.Add(item);
                     }
+
                     foreach (var item in publishersBook)
                     {
                         lstSearching.Add(item);
                     }
 
-                    ViewBag.ToplamKayitSayisi = lstSearching.Count;
+                    ViewBag.ToplamKayitSayisi = lstSearching.GroupBy(x => x.Id).Select(x => x.First()).Count(); 
 
-                    return View(lstSearching.ToPagedList(page, 2));
+                    ViewBag.Search = search;
+
+                    return View(lstSearching.GroupBy(x => x.Id).Select(x => x.First()).ToPagedList(page, 2));
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -365,6 +392,19 @@ namespace BookInfo.Controllers
                 Title = "Kitap bulunamadı.Anasayfaya yönlendiriliyorsunuz"
             };
             return View("Error", errorNotifyObj);
+        }
+        public PartialViewResult GetComment(int id, int? page)
+        {
+            var pageIndex = page ?? 1;
+
+            var commentList = commentManager.List().Where(x => x.Book.Id == id);
+
+            ViewBag.YorumSayısı = commentList.Count();
+
+            var model = commentList.Skip(3 * pageIndex - 3).Take(3).ToList();
+
+            return PartialView("_PartialUserComments", model);
+
         }
 
     }

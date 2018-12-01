@@ -343,6 +343,7 @@
     <Content Include="Content\jquery.rateyo.min.css" />
     <Content Include="Content\login-register.css" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="Content\rating.css" />
     <Content Include="Content\shop-homepage.css" />
     <Content Include="Content\validation_summary.css" />
     <Content Include="favicon.ico" />
@@ -452,6 +453,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\like.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\rating.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -494,6 +496,7 @@
     <Content Include="Views\Book\Edit.cshtml" />
     <Content Include="Views\Book\Index.cshtml" />
     <Content Include="Views\Shared\_PartialUserComments.cshtml" />
+    <Content Include="Views\Shared\_IndexBook.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -52,3 +52,5 @@ C:\Users\YAĞIZ\Desktop\BookInfo\BookInfo.DataAccessLayer\obj\Debug\BookInfo.Dat
 C:\Users\YAĞIZ\Desktop\BookInfo\BookInfo.DataAccessLayer\obj\Debug\BookInfo.DataAccessLayer.csproj.CopyComplete
 C:\Users\YAĞIZ\Desktop\BookInfo\BookInfo.DataAccessLayer\obj\Debug\BookInfo.DataAccessLayer.dll
 C:\Users\YAĞIZ\Desktop\BookInfo\BookInfo.DataAccessLayer\obj\Debug\BookInfo.DataAccessLayer.pdb
+C:\Users\YAĞIZ\Desktop\BookInfo\BookInfo.DataAccessLayer\obj\Debug\BookInfo.DataAccessLayer.Migrations.InitialCreate.resources
+C:\Users\YAĞIZ\Desktop\BookInfo\BookInfo.DataAccessLayer\obj\Debug\BookInfo.DataAccessLayer.csproj.GenerateResource.cache

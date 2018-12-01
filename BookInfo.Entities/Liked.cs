@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace BookInfo.Entities
 {
@@ -16,6 +16,6 @@ namespace BookInfo.Entities
 
         public virtual BookUser LikedUser { get; set; }
 
-       // public int Point { get; set; }
+        public int Point { get; set; }
     }
 }

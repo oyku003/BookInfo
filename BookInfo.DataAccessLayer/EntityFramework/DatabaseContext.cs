@@ -24,9 +24,9 @@ namespace BookInfo.DataAccessLayer.EntityFramework
 
         public DbSet<Publisher> Publishers { get; set; }
 
-        public DatabaseContext()
-        {
-            Database.SetInitializer(new MyInitializer());
-        }
+        //public DatabaseContext()
+        //{
+        //    Database.SetInitializer(new MyInitializer());
+        //}
     }
 }

@@ -2,6 +2,7 @@
 @using BookInfo.Entities
 @using PagedList
 @using PagedList.Mvc
+@using System.Web.Routing;
 @model BookViewModel
 
 @{
@@ -16,11 +17,17 @@
     <div class="row">
         <div class="col-md-10">
             <div class="col-md-5"><h1>@Model.Name</h1></div>
-            <p>
-                <button class="btn btn-default btn-sm" data-liked="false" data-note-id="@Model.Id">
-                    <span id="rateYo"></span><span class="like-count">@Model.LikeCount</span>
-                </button>
-            </p>
+            <div id="star-rating">
+                <input type="radio" name="example" class="rating" value="1" />
+                <input type="radio" name="example" class="rating" value="2" />
+                <input type="radio" name="example" class="rating" value="3" />
+                <input type="radio" name="example" class="rating" value="4" />
+                <input type="radio" name="example" class="rating" value="5" />
+            </div>
+            <div>
+                Puan:<div id="avgPoint">@Model.Point</div>             
+            </div>
+         
             @*<div class="col-md-5"><div id="rateYo"></div></div>*@
         </div>
     </div>
@@ -64,22 +71,93 @@
 
         </div>*@
 
-        @Html.Partial("_PartialUserComments", Model.Comments)
+    <div id="searchPagingResult">
+        @Html.Action("GetComment", new { id = ViewContext.RouteData.Values["id"] })
+    </div>
+
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-10">
+            <div class="pagination">
+                @for (int i = 1; i <= ViewBag.PageCount / 3 + 1; i++)
+                {
+                    <input type="button" class="sss btn btn-default btn-sm" value="@i" />
+                }
+            </div>
+        </div>
+    </div>
 </div>
 
 
+
 @Bootstrap.ModalPopup(id: "modal_comment", title: "Yorumlar")
+
+<link href="~/Content/rating.css" rel="stylesheet" />
 <script src="~/Scripts/comment.js"></script>
 <script src="~/Scripts/like.js"></script>
 
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
-<script src="~/Scripts/jquery.rateyo.js"></script>
+<script src="~/Scripts/rating.js"></script>
 <script type="text/javascript">
-    $(function () {
-        $("#rateYo").rateYo({
-            rating: 3.6//TODO: GetLike metodu ile kitabın puanını buraya bas
-        });
 
+    $(function () {
+        $('#star-rating').rating(function (vote, event) {
+            var sPageURL = window.location.href;
+            var indexOfLastSlash = sPageURL.lastIndexOf("/");
+
+            if (indexOfLastSlash > 0 && sPageURL.length - 1 != indexOfLastSlash)
+                var id = sPageURL.substring(indexOfLastSlash + 1);
+            else
+                id = 0;
+
+            $.ajax({
+                url: "@Url.Action("SetLikeState", "Book")",
+                type: "POST",
+                data: { id, liked: vote }
+            }).done(function (data) {
+                if (data.haserror) {
+                    alert(data.errormessage);
+                }
+                else {
+                    alert(data.result);
+                    $("#avgPoint").html(data.result);
+                }
+                }).fail(function () {
+                    alert("Sunucu ile bağlantı kurulamadı");
+                });
+        });
     });
+
+
+    $(".sss").on("click", function () {
+        var page = $(this).val();
+        var sPageURL = window.location.href;
+        var indexOfLastSlash = sPageURL.lastIndexOf("/");
+
+        if (indexOfLastSlash > 0 && sPageURL.length - 1 != indexOfLastSlash)
+            var id = sPageURL.substring(indexOfLastSlash + 1);
+        else
+            id = 0;
+        paging(id,page);
+    });
+
+
+    function paging(id, page) {
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("GetComment", "Home")",
+            data: {
+                id,page
+            },
+            success: function (ajaxCallBack) {
+                $("#searchPagingResult").html(ajaxCallBack);
+            },
+            error: function () {
+                alert("hata")
+            }
+        })
+    };
+
 </script>
 

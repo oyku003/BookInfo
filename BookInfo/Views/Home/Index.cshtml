@@ -11,61 +11,53 @@
             En Son Yorum Alanlar
         @Html.Partial("_PartialNewComments")
     </div>
-    <div class="col-md-9">
-        <div class="row carousel-holder">
-            @*Carousel*@
-            <div class="col-md-12">
-                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-                    <ol class="carousel-indicators">
-                        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
-                    </ol>
-                    <div class="carousel-inner">
-                        <div class="item active">
-                            <img class="slide-image" src="http://placehold.it/800x300" alt="">
+        <div class="col-md-9">
+            <div class="row carousel-holder">
+                @*Carousel*@
+                <div class="col-md-12">
+                    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                            <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                        </ol>
+                        <div class="carousel-inner">
+                            <div class="item active">
+                                <img class="slide-image" src="http://placehold.it/800x300" alt="">
+                            </div>
+                            <div class="item">
+                                <img class="slide-image" src="http://placehold.it/800x300" alt="">
+                            </div>
+                            <div class="item">
+                                <img class="slide-image" src="http://placehold.it/800x300" alt="">
+                            </div>
                         </div>
-                        <div class="item">
-                            <img class="slide-image" src="http://placehold.it/800x300" alt="">
-                        </div>
-                        <div class="item">
-                            <img class="slide-image" src="http://placehold.it/800x300" alt="">
-                        </div>
+                        <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                            <span class="glyphicon glyphicon-chevron-left"></span>
+                        </a>
+                        <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </a>
                     </div>
-                    <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
-                        <span class="glyphicon glyphicon-chevron-left"></span>
-                    </a>
-                    <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
-                        <span class="glyphicon glyphicon-chevron-right"></span>
-                    </a>
                 </div>
             </div>
-        </div>
-        <!--Yazılar-->
-        <div class="row">
-
-            @foreach (Book book in Model)
-            {
-                <div class="col-sm-4 col-lg-4 col-md-3" data-note-id="@book.Id">
-                    <div class="thumbnail" style="height:250px">
-                        <img src="~/Images/Mustafa_Kemal.jpg" style="height:150px;width:100px" alt="@book.Name">
-                        <div class="caption" style="height:105px">
-                            <h4 style="text-align:center">
-                                <a href="/Home/Kitap/@book.Id">
-                                    @book.Name
-                                </a>
-                            </h4>
-                            <h6 style="text-align:center">
-                                @book.Author.Name<br />
-                                @book.Year<br />
-                                @book.Publisher.Name
-                            </h6>
+            <div id="bookPagingResult">
+                @Html.Action("GetBook")
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-10">
+                        <div class="pagination">
+                            @for (int i = 1; i <= ViewBag.KitapSayısı / 3 + 1; i++)
+                            {
+                                <input type="button" class="sss btn btn-default btn-sm" value="@i" />
+                            }
                         </div>
                     </div>
                 </div>
-            }
+            </div>
+
         </div>
-    </div>
 </div>
 
 @section footer{
@@ -77,3 +69,27 @@
     <script src="~/Scripts/comment.js"></script>
     <script src="~/Scripts/like.js"></script>
     <script src="~/Scripts/NoteDetailPopup.js"></script>*@
+    <script type="text/javascript">
+         $(".sss").on("click", function () {
+        var page = $(this).val();
+       
+        paging(page);
+    });
+
+
+    function paging(page) {
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("GetBook", "Home")",
+            data: {
+                page
+            },
+            success: function (ajaxCallBack) {
+                $("#bookPagingResult").html(ajaxCallBack);
+            },
+            error: function () {
+                alert("hata")
+            }
+        })
+    };
+    </script>

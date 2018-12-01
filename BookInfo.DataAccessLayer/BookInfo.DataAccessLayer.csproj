@@ -52,6 +52,11 @@
     <Compile Include="EntityFramework\MyInitializer.cs" />
     <Compile Include="EntityFramework\Repository.cs" />
     <Compile Include="EntityFramework\RepositoryBase.cs" />
+    <Compile Include="Migrations\201811011855143_InitialCreate.cs" />
+    <Compile Include="Migrations\201811011855143_InitialCreate.Designer.cs">
+      <DependentUpon>201811011855143_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +76,11 @@
       <Project>{7af626d9-064f-415f-99d6-c280d992cd62}</Project>
       <Name>BookInfo.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201811011855143_InitialCreate.resx">
+      <DependentUpon>201811011855143_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
