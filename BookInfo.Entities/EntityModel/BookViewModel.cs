@@ -25,7 +25,7 @@ namespace BookInfo.Entities.EntityModel
 
         public int LikeCount { get; set; }
 
-        public int Point { get; set; }
+        public string Point { get; set; }
 
         public List<Comment> Comments { get; set; }
         

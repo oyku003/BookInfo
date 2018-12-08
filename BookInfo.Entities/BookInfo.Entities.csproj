@@ -58,6 +58,7 @@
     <Compile Include="Comment.cs" />
     <Compile Include="EntityBase.cs" />
     <Compile Include="EntityModel\BookViewModel.cs" />
+    <Compile Include="EntityModel\CreateBookViewModel.cs" />
     <Compile Include="EntityModel\LoginViewModel.cs" />
     <Compile Include="EntityModel\RegisterViewModel.cs" />
     <Compile Include="EntityModel\SearchViewModel.cs" />

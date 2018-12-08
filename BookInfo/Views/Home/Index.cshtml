@@ -5,12 +5,13 @@
     ViewBag.Title = "Index";
 }
 
+
 <div class="container">
     <div class="row">
         <div class="col-md-3">
             En Son Yorum Alanlar
-        @Html.Partial("_PartialNewComments")
-    </div>
+            @Html.Partial("_PartialNewComments")
+        </div>
         <div class="col-md-9">
             <div class="row carousel-holder">
                 @*Carousel*@
@@ -58,6 +59,7 @@
             </div>
 
         </div>
+    </div>
 </div>
 
 @section footer{
@@ -69,10 +71,10 @@
     <script src="~/Scripts/comment.js"></script>
     <script src="~/Scripts/like.js"></script>
     <script src="~/Scripts/NoteDetailPopup.js"></script>*@
-    <script type="text/javascript">
+<script type="text/javascript">
          $(".sss").on("click", function () {
         var page = $(this).val();
-       
+
         paging(page);
     });
 
@@ -92,4 +94,4 @@
             }
         })
     };
-    </script>
+</script>

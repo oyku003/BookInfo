@@ -77,8 +77,8 @@ namespace BookInfo.Controllers
 
                     var bookLikeCount = bookManager.List().Where(x => x.Id == Id).Select(x => x.LikeCount).First();
 
-                    model.Point = bookSumPoint / bookLikeCount;
-
+                    model.Point = ((float)bookSumPoint / bookLikeCount).ToString("0.#");
+                  
                     return View(model);
                 }
             }

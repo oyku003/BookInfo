@@ -25,10 +25,8 @@
                 <input type="radio" name="example" class="rating" value="5" />
             </div>
             <div>
-                Puan:<div id="avgPoint">@Model.Point</div>             
+                <div id="avgPoint"> Puan:@Model.Point</div>
             </div>
-         
-            @*<div class="col-md-5"><div id="rateYo"></div></div>*@
         </div>
     </div>
 </div>
@@ -76,18 +74,22 @@
     </div>
 
 </div>
-<div class="container">
-    <div class="row">
-        <div class="col-md-10">
-            <div class="pagination">
-                @for (int i = 1; i <= ViewBag.PageCount / 3 + 1; i++)
-                {
-                    <input type="button" class="sss btn btn-default btn-sm" value="@i" />
-                }
+@if (ViewBag.PageCount != 0)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <div class="pagination">
+                    @for (int i = 1; i <= ViewBag.PageCount / 3 + 1; i++)
+                    {
+                        <input type="button" class="sss btn btn-default btn-sm" value="@i" />
+                    }
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+}
 
 
 

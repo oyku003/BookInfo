@@ -44,15 +44,26 @@ else
             <span><b>Yorum Sayısı : @ViewBag.YorumSayısı </b></span>
             @foreach (var item in Model)
             {
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">@item.Owner.Username <p style="float:right">@item.CreatedOn.ToShortDateString()</p></h3>
-                        @*<h3 class="panel-title" style="text-align:right">@item.CreatedOn.ToShortDateString()</h3>*@
-                    </div>
-                    <div class="panel-body">
-                        @item.Text
-                    </div>
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">@item.Owner.Username <p style="float:right">@item.CreatedOn.ToShortDateString()</p></h3>
+                    @*<h3 class="panel-title" style="text-align:right">@item.CreatedOn.ToShortDateString()</h3>*@
                 </div>
+                <div class="panel-body">
+                    @item.Text
+                </div>
+                @if (CurrentSession.User != null && item.Owner != null && user.Id == item.Owner.Id)
+                {
+                    <span class="col-md-2 text-right">
+                        <button type="button" class="btn btn-warning btn-xs" data-edit-mode="false" onclick="@Url.Action("","")">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </button>
+                        <button type="button" class="btn btn-danger btn-xs" onclick="doComment(this,'delete_clicked',@item.Id);">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </span>
+                }
+            </div>
             }
 
         </div>

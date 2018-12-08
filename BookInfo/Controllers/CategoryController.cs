@@ -105,14 +105,5 @@ namespace BookInfo.Controllers
             return View(category);
         }
 
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Category category = categoryManager.Find(x => x.Id == id);
-            categoryManager.Delete(category);
-            return RedirectToAction("Index");
-        }
-
     }
 }

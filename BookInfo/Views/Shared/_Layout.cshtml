@@ -58,7 +58,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    @Bootstrap.LinkMenu("/Note/Create", "plus", " Not Ekle")
+                                    @Bootstrap.LinkMenu("/Book/Create", "plus", " Kitap Ekle")
                                 </li>
                                 <li role="separator" class="divider"></li>
                                 <li>
@@ -88,23 +88,15 @@
                             </ul>
                         </li>
                     }
-                    <li>
-                        <a href="/Home/MostLiked"><span class="glyphicon glyphicon-heart-empty"></span>En Beğenilenler</a>
-                    </li>
-                    <li>
-                        <a href="/Home/Index"><span class="glyphicon glyphicon-align-justify"></span>Son Yazılar</a>
-                    </li>
-                    <li>
-                        <a href="/Home/About"><span class="glyphicon glyphicon-info-sign"></span>Hakkımızda</a>
-                    </li>
+                  
                 </ul>
-                @using (Html.BeginForm("Search","Home",FormMethod.Get))
+                @using(Html.BeginForm("Search","Home",FormMethod.Get))
                 {
                     <div class="col-lg-6" style="padding-top:8px;padding-bottom:8px">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Hangi Ürünü arıyorsunuz?..." value="@(Request.QueryString["search"])" name="search" required autocomplete="off">
+                            <input type="text" class="form-control" placeholder="Hangi Ürünü arıyorsunuz?..." value="@(Request.QueryString["search"])" name="search" id="search" required autocomplete="off">
                             <span class="input-group-btn">
-                                <a href="@Url.Action("Search","Home",null)" role="button" class="btn btn-default">Ara</a>
+                                <input type="submit" class="btn btn-default" onclick="@Url.Action("Search","Home",null)" value="Ara" />                              
                             </span>
                         </div><!-- /input-group -->
                     </div><!-- /.col-lg-6 -->

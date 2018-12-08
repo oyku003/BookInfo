@@ -8,7 +8,9 @@ using System.Web;
 using System.Web.Mvc;
 using BookInfo.BusinessLayer;
 using BookInfo.Entities;
+using BookInfo.Entities.EntityModel;
 using BookInfo.Models;
+using BookInfo.ViewModels;
 
 namespace BookInfo.Controllers
 {
@@ -17,14 +19,18 @@ namespace BookInfo.Controllers
         private BookManager bookManager = new BookManager();
         private CategoryManager categoryManager = new CategoryManager();
         private LikedManager likedManager = new LikedManager();
-
-        public ActionResult Index()//Notları listeler
+        private AuthorManager authorManager = new AuthorManager();
+        private PublisherManager publisherManager = new PublisherManager();
+        private CommentManager commentManager = new CommentManager();
+        /// <summary>
+        /// Kitapları listeler
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Index()
         {
-            //var notes = bookManager.ListQueryable().Include("Category").Include("Owner").Where(x => x.Owner.Id == CurrentSession.User.Id).OrderByDescending(x => x.ModifiedOn);//ListQueryable = select * from note  , Include = join, Include içinde note entitysinde user için property adı owner oldugu için onu yazdık
+            var books = bookManager.ListQueryable().OrderByDescending(x => x.ModifiedOn);
 
-            //return View(notes.ToList());
-
-            return null;
+            return View(books.ToList());
         }
 
         public ActionResult MyLikedNotes()
@@ -47,65 +53,132 @@ namespace BookInfo.Controllers
             }
             return View(note);
         }
-        
+
         public ActionResult Create()
         {
             ViewBag.CategoryId = new SelectList(CacheHelper.GetBooksFromCache(), "Id", "Title");
-            return View();
+            ViewBag.Yazar = authorManager.List();
+            ViewBag.Kategori = categoryManager.List();
+            ViewBag.Yayınevi = publisherManager.List();
+
+            return View(new CreateBookViewModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Book book)
+        public ActionResult Create(CreateBookViewModel createBookViewModel)
         {
             ModelState.Remove("ModifiedUsername");
             ModelState.Remove("ModifiedOn");
             ModelState.Remove("CreatedOn");
             if (ModelState.IsValid)
             {
-                book.ModifiedUsername = CurrentSession.User.ToString();
-                bookManager.Insert(book);
-                return RedirectToAction("Index");
+                var author = authorManager.List(x => x.Id == createBookViewModel.Author).SingleOrDefault();
+                var publisher = publisherManager.List(x => x.Id == createBookViewModel.Publisher).SingleOrDefault();
+                var category = categoryManager.List(x => x.Id == createBookViewModel.Category).SingleOrDefault();
+
+                Book book = new Book()
+                {
+                    ModifiedUsername = CurrentSession.User.ToString(),
+                    Category = category,
+                    Author = author,
+                    Publisher = publisher,
+                    Name = createBookViewModel.Name,
+                    Description = createBookViewModel.Description,
+                    Year = createBookViewModel.Year,
+                    Page = createBookViewModel.Page
+                };
+
+                int res = bookManager.Insert(book);
+                if (res > 0)
+                {
+                    OkViewModel ok = new OkViewModel()
+                    {
+                        Title = "Kitap ekleme işleminiz başarılıdır.",
+                        RedirectingUrl = "/Book/Index"
+                    };
+
+                    return View("Ok", ok);
+                }
             }
-            ViewBag.CategoryId = new SelectList(CacheHelper.GetBooksFromCache(), "Id", "Title", book.CategoryId);
-            return View(book);
+
+            ViewBag.Yazar = authorManager.List();
+            ViewBag.Kategori = categoryManager.List();
+            ViewBag.Yayınevi = publisherManager.List();
+
+            return View(createBookViewModel);
         }
-        
+
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Book note = bookManager.Find(x => x.Id == id.Value);
-            if (note == null)
+            Book book = bookManager.Find(x => x.Id == id.Value);
+            if (book == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CategoryId = new SelectList(CacheHelper.GetBooksFromCache(), "Id", "Title", note.CategoryId);
-            return View(note);
+            ViewBag.Yazar = authorManager.List();
+            ViewBag.Kategori = categoryManager.List();
+            ViewBag.Yayınevi = publisherManager.List();
+            CreateBookViewModel createBookViewModel = new CreateBookViewModel()
+            {
+                Id = book.Id,
+                Category = book.Category.Id,
+                Author = book.Author.Id,
+                Publisher = book.Publisher.Id,
+                Name = book.Name,
+                Page = book.Page,
+                Year = book.Year
+                
+            };
+            return View(createBookViewModel);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Book book)
+        public ActionResult Edit(CreateBookViewModel book)
         {
             ModelState.Remove("ModifiedUsername");
             ModelState.Remove("ModifiedOn");
             ModelState.Remove("CreatedOn");
             if (ModelState.IsValid)
             {
-                Book db_note = bookManager.Find(x => x.Id == book.Id);
-                db_note.Name = book.Name;
-                db_note.Description = book.Description;
-                db_note.CategoryId = book.CategoryId;
-                bookManager.Update(db_note);
-                return RedirectToAction("Index");
+                Book db_book = bookManager.Find(x => x.Id == book.Id);
+                var author = authorManager.List(x => x.Id == book.Author).SingleOrDefault();
+                var publisher = publisherManager.List(x => x.Id == book.Publisher).SingleOrDefault();
+                var category = categoryManager.List(x => x.Id == book.Category).SingleOrDefault();
+
+                if (db_book != null)
+                {
+                    db_book.Name = book.Name;
+                    db_book.Description = book.Description;
+                    db_book.Category = category;
+                    db_book.Author = author;
+                    db_book.Publisher = publisher;
+                    db_book.Page = book.Page;
+                    db_book.Year = book.Year;
+                    
+                    if (bookManager.Update(db_book) > 0)
+                    {
+                        OkViewModel ok = new OkViewModel()
+                        {
+                            Title = "Kitap güncelleme işleminiz başarılı",
+                            RedirectingUrl = "/Book/Index"
+                        }; 
+                    }
+                }                
             }
-            ViewBag.CategoryId = new SelectList(CacheHelper.GetBooksFromCache(), "Id", "Title", book.CategoryId);
-            return View(book);
+            ErrorViewModel errorViewModel = new ErrorViewModel()
+            {
+                Title = "Kitap güncelleme işlemi başarısız",
+                RedirectingUrl = "/Book/Index"
+            };
+            return View("Error", errorViewModel);
         }
-        
+
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -117,16 +190,28 @@ namespace BookInfo.Controllers
             {
                 return HttpNotFound();
             }
-            return View(book);
-        }
-        
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Book book = bookManager.Find(x => x.Id == id);
-            bookManager.Delete(book);
-            return RedirectToAction("Index");
+            var deletedBookComments = commentManager.List(x => x.Book.Id == id);
+            if (deletedBookComments.Count > 0)
+            {
+                foreach (var item in deletedBookComments)
+                {
+                    commentManager.Delete(item);
+                }
+            }
+            if (bookManager.Delete(book) > 0)
+            {
+                OkViewModel ok = new OkViewModel()
+                {
+                    Title = "Kitap silme işleminiz başarılı",
+                    RedirectingUrl = "/Book/Index"
+                };
+            }
+            ErrorViewModel errorViewModel = new ErrorViewModel()
+            {
+                Title = "Kitap silme işlemi başarısız",
+                RedirectingUrl = "/Book/Index"
+            };
+            return View("Error", errorViewModel);
         }
 
         [HttpPost]
@@ -134,13 +219,13 @@ namespace BookInfo.Controllers
         {
             if (ids != null)
             {
-                 List<int> likedNoteIds = likedManager.List(x => x.LikedUser.Id == CurrentSession.User.Id && ids.Contains(x.Book.Id)).Select(
-                x => x.Book.Id).ToList();
+                List<int> likedNoteIds = likedManager.List(x => x.LikedUser.Id == CurrentSession.User.Id && ids.Contains(x.Book.Id)).Select(
+               x => x.Book.Id).ToList();
 
                 return Json(new { result = likedNoteIds });
             }
             return null;
-            
+
         }
 
         public ActionResult GetNoteText(int? id)
@@ -157,7 +242,7 @@ namespace BookInfo.Controllers
 
             return PartialView("_PartialNoteText", book);
         }
-       
+
         [HttpPost]
         public JsonResult SetLikeState(int id, int liked)
         {
@@ -189,7 +274,7 @@ namespace BookInfo.Controllers
             {
                 if (liked > 0)
                 {
-                    if (like!= null && like.LikedUser.Id != CurrentSession.User.Id)
+                    if (like != null && like.LikedUser.Id != CurrentSession.User.Id)
                     {
                         book.LikeCount++;
                     }
@@ -204,7 +289,7 @@ namespace BookInfo.Controllers
                 }
                 res = bookManager.Update(book);
 
-                var bookSumPoint = likedManager.List().Where(x => x.Book.Id == id).Sum(x=>x.Point);
+                var bookSumPoint = likedManager.List().Where(x => x.Book.Id == id).Sum(x => x.Point);
 
                 var bookLikeCount = bookManager.List().Where(x => x.Id == id).Select(x => x.LikeCount).First();
 

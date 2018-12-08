@@ -14,5 +14,7 @@ namespace BookInfo.Entities
 
         [DisplayName("İsim"), StringLength(25, ErrorMessage = "{0} alanı max. {1} karakter alır.")]
         public string Name { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }
