@@ -266,7 +266,7 @@ namespace BookInfo.Controllers
             else if (like != null && liked > 0)
             {
                 like.Book = book;
-                like.LikedUser = CurrentSession.User;
+                like.LikedUser.Id = CurrentSession.User.Id;
                 like.Point = liked;
                 res = likedManager.Update(like);
             }

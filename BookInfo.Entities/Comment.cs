@@ -14,6 +14,7 @@ namespace BookInfo.Entities
 
         public virtual Book Book { get; set; }
         public virtual BookUser Owner { get; set; }
-
+        public bool IsActive { get; set; }
+        public int pageCount { get; set; }
     }
 }

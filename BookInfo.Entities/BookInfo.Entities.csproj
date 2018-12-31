@@ -53,10 +53,12 @@
   <ItemGroup>
     <Compile Include="Author.cs" />
     <Compile Include="Book.cs" />
+    <Compile Include="BookSessionInfo.cs" />
     <Compile Include="BookUser.cs" />
     <Compile Include="Category.cs" />
     <Compile Include="Comment.cs" />
     <Compile Include="EntityBase.cs" />
+    <Compile Include="EntityModel\AprioriBookViewModel.cs" />
     <Compile Include="EntityModel\BookViewModel.cs" />
     <Compile Include="EntityModel\CreateBookViewModel.cs" />
     <Compile Include="EntityModel\LoginViewModel.cs" />
@@ -67,6 +69,7 @@
     <Compile Include="Messages\ErrorMessageObj.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Publisher.cs" />
+    <Compile Include="SimilarBook.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

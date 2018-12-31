@@ -14,6 +14,8 @@ using BookInfo.Entities.EntityModel;
 using BookInfo.BusinessLayer.Result;
 using static BookInfo.Entities.Messages.ErrorMessageCode;
 using static BookInfo.Entities.EntityModel.SearchViewModel;
+using BookInfo.Common.Helpers;
+using BookInfo.ML;
 
 namespace BookInfo.Controllers
 {
@@ -26,11 +28,13 @@ namespace BookInfo.Controllers
         private AuthorManager authorManager = new AuthorManager();
         private PublisherManager publisherManager = new PublisherManager();
         private LikedManager likedManager = new LikedManager();
+        private BookSessionInfoManager bookSessionInfoManager = new BookSessionInfoManager();
+        private SimilarBookManager similarBookManager = new SimilarBookManager();
 
         public ActionResult Index()
         {
             ViewBag.KitapSayısı = bookManager.ListQueryable().Where(x => x.Id.ToString() != null).OrderByDescending(x => x.ModifiedOn).ToList().Count();
-
+          
             return View();
         }
         public PartialViewResult GetBook(int? page)
@@ -45,12 +49,44 @@ namespace BookInfo.Controllers
 
             return PartialView("_IndexBook", model);
         }
+        public ActionResult GetAprioriBook(int id)
+        {
+            List<Book> model = new List<Book>();
+
+            var aprioriBook = similarBookManager.List().Where(x => x.BookId == id);
+
+            foreach (var item in aprioriBook)
+            {
+                var bookInfo = bookManager.List().Where(x => x.Id == item.SimilarBookId).FirstOrDefault();             
+
+                model.Add(bookInfo);    
+            }
+            return PartialView("_PartialAprioriBook", model);
+        }
+        public ActionResult GetPopularBook()
+        {
+            List<Book> model = new List<Book>();
+
+            var popularBook = bookManager.List().OrderByDescending(x => x.Clicked).Take(6);
+
+            foreach (var item in popularBook)
+            {
+               // var bookInfo = bookManager.List().Where(x => x.Id == item.SimilarBookId).FirstOrDefault();
+
+                model.Add(item);
+            }
+            return PartialView("_PartialPopularBook", model);
+        }
+   
         public ActionResult Kitap(int Id)
         {
+            new AprioriProcess().CreateAprioriRules();
             if (Id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            bookSessionInfoManager.SaveBookInfo(Id);
 
             BookViewModel model = null;
             try
@@ -71,14 +107,31 @@ namespace BookInfo.Controllers
                         Comments = book.Comments
                     };
 
-                    ViewBag.PageCount = commentManager.List().Where(x => x.Book.Id == Id).Count();
+                    int page = commentManager.List().Where(x => x.Book.Id == Id).Count();
+                    if (page % 3 == 0)
+                    {
+                        ViewBag.PageCount = page / 3;
+                    }
+                    else
+                    {
+                        ViewBag.PageCount = page/3 +1;
+                    }
 
                     var bookSumPoint = likedManager.List().Where(x => x.Book.Id == Id).Sum(x => x.Point);
 
                     var bookLikeCount = bookManager.List().Where(x => x.Id == Id).Select(x => x.LikeCount).First();
+                    if (bookLikeCount != 0)
+                    {
+                        model.Point = ((float)bookSumPoint / bookLikeCount).ToString("0.#");
+                    }
+                    else
+                    {
+                        model.Point = "0";
+                    }
+                    book.Clicked++;
+                    bookManager.Update(book);
 
-                    model.Point = ((float)bookSumPoint / bookLikeCount).ToString("0.#");
-                  
+
                     return View(model);
                 }
             }
@@ -259,7 +312,7 @@ namespace BookInfo.Controllers
                 {
                     string filename = $"user_{model.Id}.{ProfileImage.ContentType.Split('/')[1]}";
 
-                    ProfileImage.SaveAs(Server.MapPath($"~/iamges/{filename}"));
+                    ProfileImage.SaveAs(Server.MapPath($"~/images/{filename}"));
                     model.ProfileImageFilename = filename;
 
                 }
@@ -397,15 +450,24 @@ namespace BookInfo.Controllers
         {
             var pageIndex = page ?? 1;
 
-            var commentList = commentManager.List().Where(x => x.Book.Id == id);
+            var commentList = commentManager.List().Where(x => x.Book.Id == id).OrderByDescending(x=>x.CreatedOn);
 
             ViewBag.YorumSayısı = commentList.Count();
 
             var model = commentList.Skip(3 * pageIndex - 3).Take(3).ToList();
+            
+            int pageCount = commentManager.List().Where(x => x.Book.Id == id).Count();
+            if (pageCount % 3 == 0)
+            {
+                ViewBag.PageCount = pageCount / 3;
+            }
+            else
+            {
+                ViewBag.PageCount = pageCount / 3 + 1;
+            }
 
             return PartialView("_PartialUserComments", model);
 
         }
-
     }
 }

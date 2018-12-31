@@ -17,7 +17,7 @@ namespace BookInfo.Models
             if (result == null)
             {
                 CommentManager commentManager = new CommentManager();
-                result = commentManager.ListQueryable().Include("Book").OrderByDescending(x=>x.CreatedOn).Take(5);
+                result = commentManager.ListQueryable().Include("Book").Where(x=>x.IsActive == true).OrderByDescending(x=>x.CreatedOn).Take(5);
                 WebCache.Set("category-cache", result, 20, true);
             }
             return result;

@@ -32,6 +32,7 @@ namespace BookInfo.Entities.EntityModel
         public BookViewModel()
         {
             Description = null;
+            Point = "";
         }
     }
 }

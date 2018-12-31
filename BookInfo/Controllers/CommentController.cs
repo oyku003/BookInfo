@@ -40,20 +40,12 @@ namespace MyEverNoteMvc.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(int? id, string text)
+        public ActionResult Update(int commentId, string newComment)
         {
             
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Comment comment = commentManager.Find(x => x.Id == id);
-
-            if (comment == null)
-            {
-                return new HttpNotFoundResult();
-            }
-            comment.Text = text;
+            Comment comment = commentManager.Find(x => x.Id == commentId);
+                      
+            comment.Text = newComment;
 
             if (commentManager.Update(comment) > 0)
             {
@@ -63,78 +55,37 @@ namespace MyEverNoteMvc.Controllers
             return Json(new { result = false }, JsonRequestBehavior.AllowGet);
 
         }
+        [HttpPost]
+        public JsonResult Delete(int commentId)
+        {         
+            Comment comment = commentManager.Find(x => x.Id == commentId);
        
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Comment comment = commentManager.Find(x => x.Id == id);
-            if (comment == null)
-            {
-                return new HttpNotFoundResult();
-            }
-
             if (commentManager.Delete(comment) > 0)
             {
-                return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+                return Json(new { hasError = false, errorMessage = string.Empty });
             }
 
-            return Json(new { result = false }, JsonRequestBehavior.AllowGet);
+            return Json(new { hasError = true, errorMessage = "Hata oluştu" });
         }
-       
-        //[HttpPost]
-        //public ActionResult Create(string commentText, int bookid)
-        //{
-        //    ModelState.Remove("ModifiedUsername");
-        //    ModelState.Remove("ModifiedOn");
-        //    ModelState.Remove("CreatedOn");
-        //    if (ModelState.IsValid)
-        //    {
-        //        if (bookid == null)
-        //        {
-        //            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //        }
-        //        Book book = bookManager.Find(x => x.Id == bookid);
-
-        //        if (book == null)
-        //        {
-        //            return new HttpNotFoundResult();
-        //        }
-        //        Comment comment = new Comment();
-        //        comment.Book = book;
-        //        comment.Owner = CurrentSession.User;
-
-        //        //    if (commentManager.Insert(comment) > 0)
-        //        //    {
-        //        //        return Json(new { result = true }, JsonRequestBehavior.AllowGet);
-        //        //    }
-        //        //}
-        //        //return Json(new { result = false }, JsonRequestBehavior.AllowGet);
-
-        //        return null;
-        //}
-
-        public ActionResult Create(string commentText, int id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+           
+        [HttpPost]
+        public JsonResult Create(int id, string commentText)
+        {            
             Comment comment = new Comment();
-
+            
             Book book = bookManager.Find(x => x.Id == id);
             comment.Book = book;
             comment.Owner = CurrentSession.User;
             comment.Text = commentText;
+            comment.IsActive = true;
 
+            var comments = commentManager.List(x => x.Book.Id == id);
             if (commentManager.Insert(comment) > 0)
             {
-                return Json(new { result = true }, JsonRequestBehavior.AllowGet);
+                return Json(new { hasError = false, errorMessage = string.Empty});
             }
 
-            return null;
+            return Json(new { hasError = true, errorMessage = "Hata oluştu"});
         }
 
     }

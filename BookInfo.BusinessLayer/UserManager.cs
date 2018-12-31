@@ -19,7 +19,7 @@ namespace BookInfo.BusinessLayer
             BusinessLayerResult<BookUser> res = new BusinessLayerResult<BookUser>();
 
             res.Result = Find(x => x.Username == data.UserName && x.Password == data.Password);
-
+            
             if (res.Result != null)
             {
                 if (!res.Result.IsActive)
@@ -164,7 +164,10 @@ namespace BookInfo.BusinessLayer
 
             if (user != null)
             {
-                if (Delete(user) == 0)
+                user.IsActive = false;
+                user.IsAdmin = false;
+
+                if (Update(user) == 0)
                 {
                     res.AddError(UserCouldNotRemove, "Kullanıcı silinemedi");
                     return res;

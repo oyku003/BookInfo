@@ -14,5 +14,7 @@ namespace BookInfo.Entities
 
         [DisplayName("Yayın evi")]
         public string Name { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }

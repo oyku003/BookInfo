@@ -1,0 +1,28 @@
+﻿@using BookInfo.Entities;
+@model List<Book>
+
+<div class="row">
+    <h2 style="text-align:center">Popüler Ürünler</h2>
+    @foreach (Book book in Model)
+    {
+        <div class="col-sm-2">
+            <div class="thumbnail" style="height:250px">
+                <img src="~/Images/Mustafa_Kemal.jpg" style="height:150px;width:50px" alt="@book.Name">
+                <div class="caption" style="height:105px">
+                    <h4 style="text-align:center">
+                        <a href="/Home/Kitap/@book.Id">
+                            @book.Name
+                        </a>
+                    </h4>
+                    <h6 style="text-align:center">
+                        @book.Author.Name<br />
+                        @book.Year<br />
+                        @book.Publisher.Name
+                    </h6>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+

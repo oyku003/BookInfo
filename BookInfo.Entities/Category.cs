@@ -9,5 +9,6 @@ namespace BookInfo.Entities
     {
         [DisplayName("Kategori Adı")]
         public string Name { get; set; }
+        public bool IsActive { get; set; }
     }
 }

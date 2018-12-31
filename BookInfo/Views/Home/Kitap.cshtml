@@ -3,11 +3,13 @@
 @using PagedList
 @using PagedList.Mvc
 @using System.Web.Routing;
+@using BookInfo.Models
 @model BookViewModel
 
 @{
     ViewBag.Title = "Kitap";
 }
+
 <ol class="breadcrumb">
     <li><a href="#">Home</a></li>
     <li><a href="#">Library</a></li>
@@ -17,19 +19,24 @@
     <div class="row">
         <div class="col-md-10">
             <div class="col-md-5"><h1>@Model.Name</h1></div>
-            <div id="star-rating">
-                <input type="radio" name="example" class="rating" value="1" />
-                <input type="radio" name="example" class="rating" value="2" />
-                <input type="radio" name="example" class="rating" value="3" />
-                <input type="radio" name="example" class="rating" value="4" />
-                <input type="radio" name="example" class="rating" value="5" />
-            </div>
-            <div>
-                <div id="avgPoint"> Puan:@Model.Point</div>
+            <div class="col-md-5">
+                <div id="star-rating" style="margin-top:20px;margin-bottom:10px">
+                    <input type="radio" name="example" class="rating" value="1" />
+                    <input type="radio" name="example" class="rating" value="2" />
+                    <input type="radio" name="example" class="rating" value="3" />
+                    <input type="radio" name="example" class="rating" value="4" />
+                    <input type="radio" name="example" class="rating" value="5" />
+                </div>
+                <div id="session" style="display:none">@(CurrentSession.User != null ? CurrentSession.User.Username : "")</div>
+                <div>
+                    <div id="avgPoint"><span>Toplam puan:</span> @(Model.Point != "0" ? Model.Point : "Henüz puan verilmemiştir.") </div>
+                    <div id="notLike" style="display:none">Puanlama için üyelik girişi yapmalısınız!</div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+<br />
 <div class="container">
 
     <div class="col-md-10">
@@ -80,7 +87,7 @@
         <div class="row">
             <div class="col-md-10">
                 <div class="pagination">
-                    @for (int i = 1; i <= ViewBag.PageCount / 3 + 1; i++)
+                    @for (int i = 1; i <= ViewBag.PageCount; i++)
                     {
                         <input type="button" class="sss btn btn-default btn-sm" value="@i" />
                     }
@@ -90,9 +97,8 @@
     </div>
 
 }
-
-
-
+@Html.Action("GetAprioriBook")
+@Html.Action("GetPopularBook")
 @Bootstrap.ModalPopup(id: "modal_comment", title: "Yorumlar")
 
 <link href="~/Content/rating.css" rel="stylesheet" />
@@ -112,8 +118,21 @@
                 var id = sPageURL.substring(indexOfLastSlash + 1);
             else
                 id = 0;
+            var session = $("#session").text();
+            if (session === "") {
+                $("#notLike").css('display', 'block');
+            }
+            else {
+                setLike(id, vote);
+            }
 
-            $.ajax({
+        });
+    });
+
+
+    function setLike(id, vote)
+    {
+             $.ajax({
                 url: "@Url.Action("SetLikeState", "Book")",
                 type: "POST",
                 data: { id, liked: vote }
@@ -122,15 +141,12 @@
                     alert(data.errormessage);
                 }
                 else {
-                    alert(data.result);
-                    $("#avgPoint").html(data.result);
+                    $("#avgPoint").html("<span>Toplam puan:</span>"+ data.result);
                 }
                 }).fail(function () {
                     alert("Sunucu ile bağlantı kurulamadı");
                 });
-        });
-    });
-
+    }
 
     $(".sss").on("click", function () {
         var page = $(this).val();

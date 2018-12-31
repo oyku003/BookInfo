@@ -8,76 +8,262 @@
 @{
     BookUser user = CurrentSession.User;
 }
-
-@if (user != null)
-{
-    <form action="@Url.Action("Create", "Comment")" method="get">
-        @Html.Hidden("id", Request.QueryString["id"])
-        <div class="row">
-            <div class="col-md-8">
-                <div class="form-group">
-                    <textarea class="form-control" rows="5" id="commentText" name="commentText" placeholder="Yorumunuz..."></textarea>
-                </div>
-                <button type="submit" class="btn btn-info btn-sm">Yorum yap</button>
-            </div>
-        </div>
-    </form>
-}
-
-else
-{
+<div class="container">
     <div class="row">
-        <div class="col-md-8">
-            <div class="alert alert-info">
-                Yorum yapmak için giriş yapmalısınız.
+        @if (user != null)
+        {           
+                @Html.Hidden("id", Request.QueryString["id"])
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <textarea class="form-control" rows="2" id="commentText" name="commentText" placeholder="Yorumunuz..."></textarea>
+                        </div>
+                        <button type="submit" id="comment" class="btn btn-info btn-sm">Yorum yap</button>
+                        <br />
+                    </div>
+                </div>           
+            <br />
+        }
+
+        else
+        {
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="alert alert-info">
+                        Yorum yapmak için giriş yapmalısınız.
+                    </div>
+                </div>
             </div>
-        </div>
+        }
+
+        @if (Model != null && Model.Count > 0)
+        {
+            <div class="row">
+                <div class="col-md-8">
+                    <h3 style="text-align:center">Yorumlar</h3>
+
+                    <span><b>Yorum Sayısı : @ViewBag.YorumSayısı </b></span>
+
+                    @foreach (var item in Model)
+                    {
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">@item.Owner.Username <p style="float:right">@item.CreatedOn</p></h3>
+                                @*<h3 class="panel-title" style="text-align:right">@item.CreatedOn.ToShortDateString()</h3>*@
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-md-10" id="newComment">@item.Text</div>
+                                @Html.HiddenFor(model=>item.Id, new { id = "comment_id" })
+                                <div class="col-md-2">
+                                    @if (CurrentSession.User != null && item.Owner != null && user.Id == item.Owner.Id)
+                                    {
+                                    <span class="col-md-2 text-right">                                      
+                                        <button type="submit" id="commentDelete" class="btn btn-danger btn-xs">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </button>
+                                    </span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        }
+        else 
+        {
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="alert alert-danger">
+                        Henüz yorum yok.
+                    </div>
+                </div>
+            </div>
+        }
     </div>
-}
+</div>
 
-@if (Model != null && Model.Count > 0)
-{
-    <div class="row">
-        <div class="col-md-8">
-            <h3 style="text-align:center">Yorumlar</h3>
+<script>
+    $("#comment").on("click", function () {
+        var commentText = $("#commentText").val();
+        var id = $("#id").val();
+        if (commentText === "") {
+            alert("Yorum, boş olamaz!");
+            return false;
+        }
+        comment(id, commentText)
+    });
+    $("#commentUpdate").on("click", function () {
+        var commentId = $("#comment_id").val();
+        var id = $("#id").val();
+        var newComment = $("#newComment").val();
 
-            <span><b>Yorum Sayısı : @ViewBag.YorumSayısı </b></span>
-            @foreach (var item in Model)
-            {
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">@item.Owner.Username <p style="float:right">@item.CreatedOn.ToShortDateString()</p></h3>
-                    @*<h3 class="panel-title" style="text-align:right">@item.CreatedOn.ToShortDateString()</h3>*@
-                </div>
-                <div class="panel-body">
-                    @item.Text
-                </div>
-                @if (CurrentSession.User != null && item.Owner != null && user.Id == item.Owner.Id)
-                {
-                    <span class="col-md-2 text-right">
-                        <button type="button" class="btn btn-warning btn-xs" data-edit-mode="false" onclick="@Url.Action("","")">
-                            <span class="glyphicon glyphicon-edit"></span>
-                        </button>
-                        <button type="button" class="btn btn-danger btn-xs" onclick="doComment(this,'delete_clicked',@item.Id);">
-                            <span class="glyphicon glyphicon-trash"></span>
-                        </button>
-                    </span>
+        commentUpd(id, commentId, newComment)
+    });
+    $("#commentDelete").on("click", function () { 
+        var commentId = $("#comment_id").val();
+        var id = $("#id").val();
+
+        commentDel(commentId)
+    });
+    function commentDel(commentId, id) {
+      $.ajax({
+                url: "@Url.Action("Delete", "Comment")",
+                type: "POST",
+                data: { commentId }
+            }).done(function (data) {
+                if (data.haserror) {
+                    alert("hata");
                 }
-            </div>
+                else {
+                    alert("çalıştı")
+                   
+                }
+                }).fail(function () {
+                    alert("Sunucu ile bağlantı kurulamadı");
+            });
+
+        $.ajax({
+             url: "@Url.Action("GetComment", "Home")",
+                type: "GET",
+                 data: {id}
+        }).done(function (data) {
+            $("#searchPagingResult").html('');
+            $("#searchPagingResult").html(data);
+        })
+    }
+    function doComment(btn, e, noteid, spanid) {
+
+        var button = $(btn);
+        var mode = button.data("edit-mode");
+
+        if (e === "edit_clicked") {
+            if (!mode) {
+                button.data("edit-mode", true);
+                button.removeClass("btn-warning");
+                button.addClass("btn-success");
+                var btnSpan = button.find("span");
+                btnSpan.removeClass("glyphicon-edit");
+                btnSpan.addClass("glyphicon-ok");
+
+                $(spanid).addClass("editable");
+                $(spanid).attr("contenteditable", true);
+                $(spanid).focus();
             }
+            else {
+                button.data("edit-mode", false);
+                button.addClass("btn-warning");
+                button.removeClass("btn-success");
+                var btnSpan = button.find("span");
+                btnSpan.addClass("glyphicon-edit");
+                btnSpan.removeClass("glyphicon-ok");
 
-        </div>
-    </div>
-}
-else
-{
-    <div class="row">
-        <div class="col-md-8">
-            <div class="alert alert-danger">
-                Henüz yorum yok.
-            </div>
-        </div>
-    </div>
-}
+                $(spanid).removeClass("editable");
+                $(spanid).attr("contenteditable", false);
 
+                var txt = $(spanid).text();
+
+                $.ajax({
+                    method: "POST",
+                    url: "/Comment/Update/" + noteid,
+                    data: { text: txt }
+                }).done(function (data) {
+
+                    if (data.result) {
+                        // yorumlar partial tekrar yüklenir..
+                        $(modalCommentBodyId).load("/Note/ShowMeetingNotes/" + noteid);
+                    }
+                    else {
+                        alert("Yorum güncellenemedi.");
+                    }
+
+                }).fail(function () {
+                    alert("Sunucu ile bağlantı kurulamadı.");
+                });
+            }
+            $.ajax({
+                url: "@Url.Action("GetComment", "Home")",
+                type: "GET",
+                data: { id }
+            }).done(function (data) {
+                $("#searchPagingResult").html('');
+                $("#searchPagingResult").html(data);
+                
+            })
+
+        }
+    }
+    function commentUpd(commentId, id, newComment) {
+      $.ajax({
+                url: "@Url.Action("Update", "Comment")",
+                type: "POST",
+                data: { commentId, newComment }
+            }).done(function (data) {
+                if (data.haserror) {
+                    alert("hata");
+                }
+                else {
+                    alert("çalıştı")                   
+                }
+                }).fail(function () {
+                    alert("Sunucu ile bağlantı kurulamadı");
+            });
+
+        $.ajax({
+             url: "@Url.Action("GetComment", "Home")",
+                type: "GET",
+                 data: {id}
+        }).done(function (data) {
+            $("#searchPagingResult").html('');
+            $("#searchPagingResult").html(data);
+        })
+    }
+    function comment(id, commentText)
+    {
+             $.ajax({
+                url: "@Url.Action("Create", "Comment")",
+                type: "POST",
+                 data: { id, commentText }
+            }).done(function (data) {
+                if (data.haserror) {
+                    alert("hata");
+                }
+                else {
+                    alert("çalıştı")
+                   
+                }
+                }).fail(function () {
+                    alert("Sunucu ile bağlantı kurulamadı");
+            });
+
+        $.ajax({
+             url: "@Url.Action("GetComment", "Home")",
+                type: "GET",
+                 data: {id}
+        }).done(function (data) {
+            $("#searchPagingResult").html('');
+            $("#searchPagingResult").html(data);
+           
+        })
+    }
+
+    function GetComment(id) {
+         $.ajax({
+                url: "@Url.Action("Kitap", "Home")",
+                type: "GET",
+                 data: { Id : id }
+            }).done(function (data) {
+                if (data.haserror) {
+                    alert("hata");
+                } 
+                else {
+                    alert("yorumlar geldi")
+                   
+                }
+                }).fail(function () {
+                    alert("Sunucu ile bağlantı kurulamadı");
+                });
+    }
+</script>
 

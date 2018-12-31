@@ -24,6 +24,10 @@ namespace BookInfo.DataAccessLayer.EntityFramework
 
         public DbSet<Publisher> Publishers { get; set; }
 
+        public DbSet<BookSessionInfo> BookSessionInfos { get; set; }
+
+        public DbSet<SimilarBook> SimilarBooks { get; set; }
+
         //public DatabaseContext()
         //{
         //    Database.SetInitializer(new MyInitializer());
