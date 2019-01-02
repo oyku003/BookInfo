@@ -78,25 +78,12 @@
 
     <div id="searchPagingResult">
         @Html.Action("GetComment", new { id = ViewContext.RouteData.Values["id"] })
+
+     
     </div>
 
 </div>
-@if (ViewBag.PageCount != 0)
-{
-    <div class="container">
-        <div class="row">
-            <div class="col-md-10">
-                <div class="pagination">
-                    @for (int i = 1; i <= ViewBag.PageCount; i++)
-                    {
-                        <input type="button" class="sss btn btn-default btn-sm" value="@i" />
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
 
-}
 @Html.Action("GetAprioriBook")
 @Html.Action("GetPopularBook")
 @Bootstrap.ModalPopup(id: "modal_comment", title: "Yorumlar")
@@ -148,7 +135,10 @@
                 });
     }
 
-    $(".sss").on("click", function () {
+    var selectorDiv = '#searchPagingResult';
+    var $result = $(selectorDiv);
+
+    $result.on("click", ".sss", function () {
         var page = $(this).val();
         var sPageURL = window.location.href;
         var indexOfLastSlash = sPageURL.lastIndexOf("/");
@@ -157,8 +147,21 @@
             var id = sPageURL.substring(indexOfLastSlash + 1);
         else
             id = 0;
-        paging(id,page);
+        paging(id, page);
     });
+
+    //$(".sss").on("click", function () {
+    //    alert("a");
+    //    var page = $(this).val();
+    //    var sPageURL = window.location.href;
+    //    var indexOfLastSlash = sPageURL.lastIndexOf("/");
+
+    //    if (indexOfLastSlash > 0 && sPageURL.length - 1 != indexOfLastSlash)
+    //        var id = sPageURL.substring(indexOfLastSlash + 1);
+    //    else
+    //        id = 0;
+    //    paging(id,page);
+    //});
 
 
     function paging(id, page) {

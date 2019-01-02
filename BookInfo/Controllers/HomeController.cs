@@ -453,25 +453,26 @@ namespace BookInfo.Controllers
         }
         public PartialViewResult GetComment(int id, int? page)
         {
+            var returnModel = new UserCommentViewModel();
             var pageIndex = page ?? 1;
 
             var commentList = commentManager.List().Where(x => x.Book.Id == id).OrderByDescending(x=>x.CreatedOn);
 
-            ViewBag.YorumSayısı = commentList.Count();
+            returnModel.CommentCount = commentList.Count();
 
-            var model = commentList.Skip(3 * pageIndex - 3).Take(3).ToList();
+            returnModel.Comments = commentList.Skip(3 * pageIndex - 3).Take(3).ToList();
             
             int pageCount = commentManager.List().Where(x => x.Book.Id == id).Count();
             if (pageCount % 3 == 0)
             {
-                ViewBag.PageCount = pageCount / 3;
+                returnModel.PageCount = pageCount / 3;
             }
             else
             {
-                ViewBag.PageCount = pageCount / 3 + 1;
+                returnModel.PageCount = pageCount / 3 + 1;
             }
 
-            return PartialView("_PartialUserComments", model);
+            return PartialView("_PartialUserComments", returnModel);
 
         }
     }

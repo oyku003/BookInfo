@@ -47,3 +47,4 @@ C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Entities\obj\Debug\BookInfo.En
 C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Entities\obj\Debug\BookInfo.Entities.csproj.CopyComplete
 C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Entities\obj\Debug\BookInfo.Entities.dll
 C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Entities\obj\Debug\BookInfo.Entities.pdb
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Entities\obj\Debug\BookInfo.Entities.csprojAssemblyReference.cache

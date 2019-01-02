@@ -64,6 +64,7 @@
     <Compile Include="EntityModel\LoginViewModel.cs" />
     <Compile Include="EntityModel\RegisterViewModel.cs" />
     <Compile Include="EntityModel\SearchViewModel.cs" />
+    <Compile Include="EntityModel\UserCommentViewModel.cs" />
     <Compile Include="Liked.cs" />
     <Compile Include="Messages\ErrorMessageCode.cs" />
     <Compile Include="Messages\ErrorMessageObj.cs" />

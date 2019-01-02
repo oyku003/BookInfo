@@ -3,7 +3,7 @@
 @using PagedList
 @using PagedList.Mvc
 @using BookInfo.Entities.EntityModel
-@model  List<Comment>
+@model  UserCommentViewModel
 
 @{
     BookUser user = CurrentSession.User;
@@ -11,17 +11,17 @@
 <div class="container">
     <div class="row">
         @if (user != null)
-        {           
-                @Html.Hidden("id", Request.QueryString["id"])
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="form-group">
-                            <textarea class="form-control" rows="2" id="commentText" name="commentText" placeholder="Yorumunuz..."></textarea>
-                        </div>
-                        <button type="submit" id="comment" class="btn btn-info btn-sm">Yorum yap</button>
-                        <br />
+        {
+            @Html.Hidden("id", Request.QueryString["id"])
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <textarea class="form-control" rows="2" id="commentText" name="commentText" placeholder="Yorumunuz..."></textarea>
                     </div>
-                </div>           
+                    <button type="submit" id="comment" class="btn btn-info btn-sm">Yorum yap</button>
+                    <br />
+                </div>
+            </div>
             <br />
         }
 
@@ -36,15 +36,15 @@
             </div>
         }
 
-        @if (Model != null && Model.Count > 0)
+        @if (Model != null && Model.Comments.Any())
         {
             <div class="row">
                 <div class="col-md-8">
                     <h3 style="text-align:center">Yorumlar</h3>
 
-                    <span><b>Yorum Sayısı : @ViewBag.YorumSayısı </b></span>
+                    <span><b>Yorum Sayısı : @Model.CommentCount </b></span>
 
-                    @foreach (var item in Model)
+                    @foreach (var item in Model.Comments)
                     {
                         <div class="panel panel-info">
                             <div class="panel-heading">
@@ -53,15 +53,15 @@
                             </div>
                             <div class="panel-body">
                                 <div class="col-md-10" id="newComment">@item.Text</div>
-                                @Html.HiddenFor(model=>item.Id, new { id = "comment_id" })
+                                @Html.HiddenFor(model => item.Id, new { id = "comment_id" })
                                 <div class="col-md-2">
                                     @if (CurrentSession.User != null && item.Owner != null && user.Id == item.Owner.Id)
                                     {
-                                    <span class="col-md-2 text-right">                                      
-                                        <button type="submit" id="commentDelete" class="btn btn-danger btn-xs">
-                                            <span class="glyphicon glyphicon-trash"></span>
-                                        </button>
-                                    </span>
+                                        <span class="col-md-2 text-right">
+                                            <button type="submit" id="commentDelete" class="btn btn-danger btn-xs">
+                                                <span class="glyphicon glyphicon-trash"></span>
+                                            </button>
+                                        </span>
                                     }
                                 </div>
                             </div>
@@ -70,8 +70,26 @@
 
                 </div>
             </div>
+
+
+            if (Model.PageCount > 0)
+            {
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="pagination">
+                                @for (int i = 1; i <= Model.PageCount; i++)
+                                {
+                                    <input type="button" class="sss btn btn-default btn-sm" value="@i" />
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
         }
-        else 
+        else
         {
             <div class="row">
                 <div class="col-md-8">
