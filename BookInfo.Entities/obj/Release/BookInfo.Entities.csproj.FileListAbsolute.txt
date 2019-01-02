@@ -1,0 +1,14 @@
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Entities\bin\Release\BookInfo.Entities.dll.config
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Entities\bin\Release\BookInfo.Entities.dll
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Entities\bin\Release\BookInfo.Entities.pdb
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Entities\bin\Release\EntityFramework.dll
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Entities\bin\Release\EntityFramework.SqlServer.dll
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Entities\bin\Release\PagedList.dll
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Entities\bin\Release\EntityFramework.xml
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Entities\bin\Release\EntityFramework.SqlServer.xml
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Entities\bin\Release\PagedList.xml
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Entities\obj\Release\BookInfo.Entities.csproj.CoreCompileInputs.cache
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Entities\obj\Release\BookInfo.Entities.csproj.CopyComplete
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Entities\obj\Release\BookInfo.Entities.dll
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Entities\obj\Release\BookInfo.Entities.pdb
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Entities\obj\Release\BookInfo.Entities.csprojAssemblyReference.cache

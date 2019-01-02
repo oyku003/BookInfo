@@ -1,0 +1,6 @@
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Core\bin\Release\BookInfo.Core.dll
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Core\bin\Release\BookInfo.Core.pdb
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Core\obj\Release\BookInfo.Core.csproj.CoreCompileInputs.cache
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Core\obj\Release\BookInfo.Core.dll
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Core\obj\Release\BookInfo.Core.pdb
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Core\obj\Release\BookInfo.Core.csprojAssemblyReference.cache

@@ -14,3 +14,8 @@ C:\Users\YAĞIZ\Desktop\BookInfo\BookInfo.Core\obj\Debug\BookInfo.Core.csprojAss
 C:\Users\YAĞIZ\Desktop\BookInfo\BookInfo.Core\obj\Debug\BookInfo.Core.csproj.CoreCompileInputs.cache
 C:\Users\YAĞIZ\Desktop\BookInfo\BookInfo.Core\obj\Debug\BookInfo.Core.dll
 C:\Users\YAĞIZ\Desktop\BookInfo\BookInfo.Core\obj\Debug\BookInfo.Core.pdb
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Core\bin\Debug\BookInfo.Core.dll
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Core\bin\Debug\BookInfo.Core.pdb
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Core\obj\Debug\BookInfo.Core.csproj.CoreCompileInputs.cache
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Core\obj\Debug\BookInfo.Core.dll
+C:\Users\YAĞIZ\Desktop\Working\BookInfo\BookInfo.Core\obj\Debug\BookInfo.Core.pdb

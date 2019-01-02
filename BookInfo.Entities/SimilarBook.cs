@@ -18,5 +18,6 @@ namespace BookInfo.Entities
 
         public int SimilarBookId { get; set; }
 
+
     }
 }

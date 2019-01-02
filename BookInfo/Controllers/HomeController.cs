@@ -33,8 +33,15 @@ namespace BookInfo.Controllers
 
         public ActionResult Index()
         {
-            ViewBag.KitapSayısı = bookManager.ListQueryable().Where(x => x.Id.ToString() != null).OrderByDescending(x => x.ModifiedOn).ToList().Count();
-          
+            int pageBook = bookManager.ListQueryable().Where(x => x.Id.ToString() != null).OrderByDescending(x => x.ModifiedOn).ToList().Count();
+            if (pageBook % 3 == 0)
+            {
+                ViewBag.PageCount = pageBook / 3;
+            }
+            else
+            {
+                ViewBag.PageCount = pageBook / 3 + 1;
+            }
             return View();
         }
         public PartialViewResult GetBook(int? page)
@@ -42,9 +49,7 @@ namespace BookInfo.Controllers
             var pageIndex = page ?? 1;
 
             var bookList = bookManager.ListQueryable().Where(x => x.Id.ToString() != null).OrderByDescending(x => x.ModifiedOn).ToList();
-
-            ViewBag.KitapSayısı = bookList.Count();
-
+                      
             var model = bookList.Skip(3 * pageIndex - 3).Take(3).ToList();
 
             return PartialView("_IndexBook", model);
@@ -80,7 +85,7 @@ namespace BookInfo.Controllers
    
         public ActionResult Kitap(int Id)
         {
-            new AprioriProcess().CreateAprioriRules();
+           // new AprioriProcess().CreateAprioriRules();
             if (Id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
