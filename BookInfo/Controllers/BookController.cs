@@ -167,7 +167,9 @@ namespace BookInfo.Controllers
                         {
                             Title = "Kitap güncelleme işleminiz başarılı",
                             RedirectingUrl = "/Book/Index"
-                        }; 
+                        };
+
+                        return View("Ok", ok);
                     }
                 }                
             }
@@ -205,6 +207,7 @@ namespace BookInfo.Controllers
                     Title = "Kitap silme işleminiz başarılı",
                     RedirectingUrl = "/Book/Index"
                 };
+                return View("Ok", ok);
             }
             ErrorViewModel errorViewModel = new ErrorViewModel()
             {

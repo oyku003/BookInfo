@@ -20,5 +20,7 @@ namespace BookInfo.Models
         }
 
         public System.Data.Entity.DbSet<BookInfo.Entities.Author> Authors { get; set; }
+
+        public System.Data.Entity.DbSet<BookInfo.Entities.Publisher> Publishers { get; set; }
     }
 }

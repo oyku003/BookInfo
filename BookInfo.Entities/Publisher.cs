@@ -16,5 +16,10 @@ namespace BookInfo.Entities
         public string Name { get; set; }
 
         public bool IsActive { get; set; }
+
+        public Publisher()
+        {
+            IsActive = true;
+        }
     }
 }

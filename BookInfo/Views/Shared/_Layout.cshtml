@@ -59,12 +59,11 @@
                             <ul class="dropdown-menu">
                                 <li>
                                     @Bootstrap.LinkMenu("/Book/Create", "plus", " Kitap Ekle")
-                                </li>
-                                <li role="separator" class="divider"></li>
+                                </li>                                
                                 <li>
                                     @Bootstrap.LinkMenu("/Book/Index", "th-list", " Kitaplar")
                                 </li>
-                               
+
                                 @if (CurrentSession.User.IsAdmin)
                                 {
                                     <li role="separator" class="divider"></li>
@@ -75,7 +74,22 @@
                                         @Bootstrap.LinkMenu("/Category/Index", "plus", " Kategoriler")
                                     </li>
                                     <li role="separator" class="divider"></li>
-                                
+                                    <li>
+                                        @Bootstrap.LinkMenu("/Author/Create", "plus", " Yazar Ekle")
+                                    </li>
+                                    <li>
+                                        @Bootstrap.LinkMenu("/Author/Index", "plus", " Yazarlar")
+                                    </li>
+                                    <li role="separator" class="divider"></li>
+                                    <li>
+                                        @Bootstrap.LinkMenu("/Publisher/Create", "plus", " Yayınevi Ekle")
+                                    </li>
+                                    <li>
+                                        @Bootstrap.LinkMenu("/Publisher/Index", "plus", " Yayınevi Listesi")
+                                    </li>
+                                    <li role="separator" class="divider"></li>
+
+
                                 }
 
                             </ul>
@@ -85,7 +99,7 @@
                 </ul>
                 @using(Html.BeginForm("Search","Home",FormMethod.Get))
                 {
-                    <div class="col-lg-6" style="padding-top:8px;padding-bottom:8px">
+                    <div class="col-md-6 col-md-offset-2" style="padding-top:8px;padding-bottom:8px">
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Hangi kitabı arıyorsunuz?..." value="@(Request.QueryString["search"])" name="search" id="search" required autocomplete="off">
                             <span class="input-group-btn">
@@ -132,8 +146,6 @@
                             <a href="/Home/Logout"><span class="glyphicon glyphicon-remove"></span>Çıkış</a>
                         </li>
                     }
-
-
 
                 </ul>
             </div> 

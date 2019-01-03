@@ -16,9 +16,11 @@ using static BookInfo.Entities.Messages.ErrorMessageCode;
 using static BookInfo.Entities.EntityModel.SearchViewModel;
 using BookInfo.Common.Helpers;
 using BookInfo.ML;
+using BookInfo.Filters;
 
 namespace BookInfo.Controllers
 {
+    [Exc]
     public class HomeController : Controller
     {
         private UserManager userManager = new UserManager();
@@ -42,13 +44,24 @@ namespace BookInfo.Controllers
             {
                 ViewBag.PageCount = pageBook / 3 + 1;
             }
+            ViewBag.Category = categoryManager.List();
             return View();
         }
-        public PartialViewResult GetBook(int? page)
+        public PartialViewResult GetBook(int? page, string category = null)
         {
             var pageIndex = page ?? 1;
+            int categoryId = category != "" ? Convert.ToInt32(category) : 0;
+          
+            List<Book> bookList ;
 
-            var bookList = bookManager.ListQueryable().Where(x => x.Id.ToString() != null).OrderByDescending(x => x.ModifiedOn).ToList();
+            if (string.IsNullOrWhiteSpace(category))
+            {
+                bookList = bookManager.ListQueryable().Where(x => x.Id.ToString() != null).OrderByDescending(x => x.ModifiedOn).ToList();
+            }
+            else
+            {              
+                bookList = bookManager.ListQueryable().Where(x => x.Id.ToString() != null && x.CategoryId == categoryId).OrderByDescending(x => x.ModifiedOn).ToList();
+            }
                       
             var model = bookList.Skip(3 * pageIndex - 3).Take(3).ToList();
 
@@ -104,10 +117,10 @@ namespace BookInfo.Controllers
                     {
                         Id = book.Id,
                         Name = book.Name,
-                        Author = book.Author.Name,
+                        Author = book.Author.IsActive == true ? book.Author.Name : "",
                         Description = book.Description,
                         Page = book.Page,
-                        Publisher = book.Publisher.Name,
+                        Publisher = book.Publisher.IsActive == true ? book.Publisher.Name : "",
                         Year = book.Year,
                         Comments = book.Comments
                     };
@@ -276,6 +289,7 @@ namespace BookInfo.Controllers
         {
             return View();
         }
+        [Auth]
         public ActionResult ShowProfile()
         {
             BusinessLayerResult<BookUser> res = userManager.GetUserById(CurrentSession.User.Id);
@@ -290,6 +304,7 @@ namespace BookInfo.Controllers
             }
             return View(res.Result);
         }
+        [Auth]
         public ActionResult EditProfile()
         {
             BusinessLayerResult<BookUser> res = userManager.GetUserById(CurrentSession.User.Id);
@@ -304,6 +319,7 @@ namespace BookInfo.Controllers
             }
             return View(res.Result);
         }
+        [Auth]
         [HttpPost]
         public ActionResult EditProfile(BookUser model, HttpPostedFileBase ProfileImage)
         {
@@ -337,6 +353,7 @@ namespace BookInfo.Controllers
             }
             return RedirectToAction("ShowProfile");
         }
+        [Auth]
         public ActionResult Delete()
         {
             BusinessLayerResult<BookUser> res = userManager.RemoveUserById(CurrentSession.User.Id);

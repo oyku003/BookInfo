@@ -17,7 +17,7 @@ namespace BookInfo.Controllers
     [Auth]
     [AuthAdmin]
     [Exc]
-    public class AuthorController : Controller
+    public class PublisherController : Controller
     {
         private BookManager bookManager = new BookManager();
         private CategoryManager categoryManager = new CategoryManager();
@@ -25,119 +25,119 @@ namespace BookInfo.Controllers
         private AuthorManager authorManager = new AuthorManager();
         private PublisherManager publisherManager = new PublisherManager();
         private CommentManager commentManager = new CommentManager();
-               
+
         public ActionResult Index()
         {
-            return View(authorManager.List(x=>x.IsActive == true));
+            return View(publisherManager.List(x => x.IsActive == true));
         }
-              
+       
         public ActionResult Create()
         {
             return View();
         }
-        
+       
         [HttpPost]
-        public ActionResult Create( Author author)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(Publisher publisher)
         {
             if (ModelState.IsValid)
             {
-                author.IsActive = true;
+                publisher.IsActive = true;
 
-                if (authorManager.Insert(author) > 0)
+                if (publisherManager.Insert(publisher) > 0)
                 {
                     OkViewModel ok = new OkViewModel()
                     {
-                        Title = "Yazar ekleme işleminiz başarılı",
-                        RedirectingUrl = "/Author/Index"
+                        Title = "Yayınevi ekleme işleminiz başarılı",
+                        RedirectingUrl = "/Publisher/Index"
                     };
 
                     return View("Ok", ok);
                 }
                 ErrorViewModel error = new ErrorViewModel()
                 {
-                    Title = "Yazar ekleme işleminiz başarısız",
-                    RedirectingUrl = "/Author/Index"
+                    Title = "Yayınevi ekleme işleminiz başarısız",
+                    RedirectingUrl = "/Publisher/Index"
                 };
                 return View("Error", error);
             }
 
-            return View(author);
+            return View(publisher);
         }
-
+      
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Author author = authorManager.Find(x=>x.Id == id);
-            if (author == null)
+            Publisher publisher = publisherManager.Find(x => x.Id == id);
+            if (publisher == null)
             {
                 return HttpNotFound();
             }
 
-            return View(author);
+            return View(publisher);
         }
 
-
         [HttpPost]
-        public ActionResult Edit(Author author)
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Publisher publisher)
         {
             if (ModelState.IsValid)
             {
-                Author newAuthor = authorManager.Find(x=>x.Id == author.Id);
+                Publisher newPublisher = publisherManager.Find(x => x.Id == publisher.Id);
 
-                newAuthor.Name = author.Name;
-                newAuthor.Id = author.Id;
-                newAuthor.IsActive = true;
-                if (authorManager.Update(newAuthor) > 0)
+                newPublisher.Name = publisher.Name;
+                newPublisher.Id = publisher.Id;
+                newPublisher.IsActive = true;
+                if (publisherManager.Update(newPublisher) > 0)
                 {
                     OkViewModel ok = new OkViewModel()
                     {
-                        Title = "Yazar ekleme işleminiz başarılı",
-                        RedirectingUrl = "/Author/Index"
+                        Title = "Yayınevi güncelleme işleminiz başarılı",
+                        RedirectingUrl = "/Publisher/Index"
                     };
 
                     return View("Ok", ok);
                 }
                 ErrorViewModel error = new ErrorViewModel()
                 {
-                    Title = "Yazar ekleme işleminiz başarısız",
-                    RedirectingUrl = "/Author/Index"
+                    Title = "Yazar güncelleme işleminiz başarısız",
+                    RedirectingUrl = "/Publisher/Index"
                 };
                 return View("Error", error);
             }
-            return View(author);
+            return View(publisher);
         }
-
+       
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Author author = authorManager.Find(x=>x.Id == id);
-            if (author == null)
+            Publisher publisher = publisherManager.Find(x => x.Id == id);
+            if (publisher == null)
             {
                 return HttpNotFound();
             }
-            author.IsActive = false;
+            publisher.IsActive = false;
 
-            if (authorManager.Update(author) > 0)
+            if (publisherManager.Update(publisher) > 0)
             {
                 OkViewModel ok = new OkViewModel()
                 {
-                    Title = "Yazar silme işleminiz başarılı",
-                    RedirectingUrl = "/Author/Index"
+                    Title = "Yayınevi silme işleminiz başarılı",
+                    RedirectingUrl = "/Publisher/Index"
                 };
             }
             ErrorViewModel error = new ErrorViewModel()
             {
-                Title = "Yazar ekleme işleminiz başarısız",
-                RedirectingUrl = "/Author/Index"
+                Title = "Yayınevi ekleme işleminiz başarısız",
+                RedirectingUrl = "/Publisher/Index"
             };
             return View("Error", error);
-        }
-
+        }      
     }
 }

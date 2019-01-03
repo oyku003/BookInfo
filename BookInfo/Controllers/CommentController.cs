@@ -1,5 +1,6 @@
 ﻿using BookInfo.BusinessLayer;
 using BookInfo.Entities;
+using BookInfo.Filters;
 //using MyEverNoteMvc.Filters;
 using BookInfo.Models;
 using PagedList;
@@ -10,6 +11,7 @@ using System.Web.Mvc;
 
 namespace MyEverNoteMvc.Controllers
 {
+    [Exc]
     public class CommentController : Controller
     {
         private BookManager bookManager = new BookManager();
@@ -38,7 +40,7 @@ namespace MyEverNoteMvc.Controllers
             //return PartialView("_PartialUserComments", commentList.ToPagedList(page, 1));
             return PartialView(commentList);
         }
-
+        [Auth]
         [HttpPost]
         public ActionResult Update(int commentId, string newComment)
         {
@@ -55,6 +57,7 @@ namespace MyEverNoteMvc.Controllers
             return Json(new { result = false }, JsonRequestBehavior.AllowGet);
 
         }
+        [Auth]
         [HttpPost]
         public JsonResult Delete(int commentId)
         {         
@@ -67,7 +70,7 @@ namespace MyEverNoteMvc.Controllers
 
             return Json(new { hasError = true, errorMessage = "Hata oluştu" });
         }
-           
+        [Auth]
         [HttpPost]
         public JsonResult Create(int id, string commentText)
         {            

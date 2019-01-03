@@ -41,27 +41,31 @@
                     </div>
                 </div>
             </div>
-            <div>
-                //KATEGOR FİLTRELEMSİ YAP!!!
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    @Html.DropDownList("Category", new SelectList(ViewBag.Category, "Id", "Name"),"Kategori", new { @class = "form-control", id = "myCategory" })
+                </div>
             </div>
-            <div id="bookPagingResult">
-                @Html.Action("GetBook")
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-10">
-                        <div class="pagination">
-                            @for (int i = 1; i <= ViewBag.PageCount; i++)
-                            {
-                                <input type="button" class="sss btn btn-default btn-sm" value="@i" />
-                            }
-                        </div>
+            <br />
+        </div>
+        <div id="bookPagingResult">
+            @Html.Action("GetBook")
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-6">
+                    <div class="pagination">
+                        @for (int i = 1; i <= ViewBag.PageCount; i++)
+                        {
+                            <input type="button" class="sss btn btn-info btn-sm" value="@i" />
+                        }
                     </div>
                 </div>
             </div>
-
         </div>
+
     </div>
+</div>
 </div>
 
 @section footer{
@@ -74,19 +78,41 @@
     <script src="~/Scripts/like.js"></script>
     <script src="~/Scripts/NoteDetailPopup.js"></script>*@
 <script type="text/javascript">
+    $("#myCategory").change(function () {
+        var category = $("#myCategory").val();
+
+        getCategoryBook(category);
+    })
+
          $(".sss").on("click", function () {
-        var page = $(this).val();
+             var page = $(this).val();
+             var category = $("#myCategory").val();
 
-        paging(page);
-    });
+             paging(page, category);
+         });
 
-
-    function paging(page) {
+    function paging(page, category) {
         $.ajax({
             type: "GET",
             url: "@Url.Action("GetBook", "Home")",
             data: {
-                page
+                page, category
+            },
+            success: function (ajaxCallBack) {
+                $("#bookPagingResult").html(ajaxCallBack);
+            },
+            error: function () {
+                alert("hata")
+            }
+        })
+    };
+
+    function getCategoryBook(category) {
+          $.ajax({
+            type: "GET",
+            url: "@Url.Action("GetBook", "Home")",
+            data: {
+                category
             },
             success: function (ajaxCallBack) {
                 $("#bookPagingResult").html(ajaxCallBack);

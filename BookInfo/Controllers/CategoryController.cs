@@ -8,10 +8,14 @@ using System.Web;
 using System.Web.Mvc;
 using BookInfo.BusinessLayer;
 using BookInfo.Entities;
+using BookInfo.Filters;
 using BookInfo.Models;
 
 namespace BookInfo.Controllers
 {
+    [Auth]
+    [AuthAdmin]
+    [Exc]
     public class CategoryController : Controller
     {
         private CategoryManager categoryManager = new CategoryManager();
